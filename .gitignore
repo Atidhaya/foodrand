@@ -64,6 +64,7 @@ bin/*
 !/plugins/fetch.json
 plugins/*
 platforms/*
+cordova/
 
 
 # End of https://www.gitignore.io/api/apachecordova

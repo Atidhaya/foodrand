@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<<<<<<< HEAD
-<merger version="3"><dataSet config="main"><source path="C:\Teamata\Rapid Programming\foodrand\cordova\platforms\android\app\src\main\shaders"/></dataSet><dataSet config="debug"><source path="C:\Teamata\Rapid Programming\foodrand\cordova\platforms\android\app\src\debug\shaders"/></dataSet></merger>
-=======
-<merger version="3"><dataSet config="main"><source path="/Users/Boat/Desktop/Rapid Programming/foodrand/cordova/platforms/android/app/src/main/shaders"/></dataSet><dataSet config="debug"><source path="/Users/Boat/Desktop/Rapid Programming/foodrand/cordova/platforms/android/app/src/debug/shaders"/></dataSet></merger>
->>>>>>> origin/boat
