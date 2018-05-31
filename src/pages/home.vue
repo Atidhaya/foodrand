@@ -26,6 +26,7 @@
       <f7-row>
         <f7-col width="50">
           <f7-button fill raised popup-open="#popup">Popup</f7-button>
+          <f7-button fill raised popup-open="#popup2">Popup2</f7-button>
         </f7-col>
         <f7-col width="50">
           <f7-button fill raised login-screen-open="#login-screen">Login Screen</f7-button>

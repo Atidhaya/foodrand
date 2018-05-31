@@ -1,10 +1,17 @@
 {
     "logs": [
         {
+<<<<<<< HEAD
             "outputFile": "C:\\Teamata\\Rapid Programming\\foodrand\\cordova\\platforms\\android\\app\\build\\intermediates\\res\\merged\\debug\\values_values.arsc.flat",
             "map": [
                 {
                     "source": "C:\\Teamata\\Rapid Programming\\foodrand\\cordova\\platforms\\android\\app\\src\\main\\res\\values\\strings.xml",
+=======
+            "outputFile": "/Users/Boat/Desktop/Rapid Programming/foodrand/cordova/platforms/android/app/build/intermediates/res/merged/debug/values_values.arsc.flat",
+            "map": [
+                {
+                    "source": "/Users/Boat/Desktop/Rapid Programming/foodrand/cordova/platforms/android/app/src/main/res/values/strings.xml",
+>>>>>>> origin/boat
                     "from": {
                         "startLines": "4,2,3",
                         "startColumns": "4,4,4",

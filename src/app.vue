@@ -2,11 +2,13 @@
   <!-- App -->
   <div id="app">
 
+    <f7-button href="/sign-up/"> asda</f7-button>
+
     <!-- Statusbar -->
     <f7-statusbar></f7-statusbar>
 
     <!-- Left Panel -->
-    <f7-panel left reveal theme-dark>
+    <f7-panel left cover theme-dark>
       <f7-view url="/panel-left/"></f7-view>
     </f7-panel>
 
@@ -23,6 +25,20 @@
       <f7-view>
         <f7-page>
           <f7-navbar title="Popup">
+            <f7-nav-right>
+              <f7-link popup-close>Close</f7-link>
+            </f7-nav-right>
+          </f7-navbar>
+          <f7-block>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Neque, architecto. Cupiditate laudantium rem nesciunt numquam, ipsam. Voluptates omnis, a inventore atque ratione aliquam. Omnis iusto nemo quos ullam obcaecati, quod.</f7-block>
+        </f7-page>
+      </f7-view>
+    </f7-popup>
+
+    <!-- 2 Popup -->
+    <f7-popup id="popup2">
+      <f7-view>
+        <f7-page>
+          <f7-navbar title="Popup2">
             <f7-nav-right>
               <f7-link popup-close>Close</f7-link>
             </f7-nav-right>
@@ -61,5 +77,7 @@
 </template>
 
 <script>
-export default {}
+import F7Button from "framework7-vue/src/components/button";
+
+export default {components: {F7Button}}
 </script>
