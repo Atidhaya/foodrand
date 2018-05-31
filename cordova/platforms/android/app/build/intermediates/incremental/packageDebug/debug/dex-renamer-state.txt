@@ -1,0 +1,4 @@
+#Wed May 30 23:40:57 ICT 2018
+base.0=C\:\\Teamata\\Rapid Programming\\foodrand\\cordova\\platforms\\android\\app\\build\\intermediates\\transforms\\dexMerger\\debug\\0
+renamed.0=classes.dex
+file.0=C\:\\Teamata\\Rapid Programming\\foodrand\\cordova\\platforms\\android\\app\\build\\intermediates\\transforms\\dexMerger\\debug\\0\\classes.dex
