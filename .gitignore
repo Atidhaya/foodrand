@@ -53,3 +53,16 @@ src/fonts
 **/.firebaserc
 
 # End of https://www.gitignore.io/api/firebase
+
+### ApacheCordova ###
+# Apache Cordova generated files and directories
+bin/*
+!/plugins
+!/plugins/android.json
+!/plugins/fetch.json
+plugins/*
+platforms/*
+cordova/
+
+
+# End of https://www.gitignore.io/api/apachecordova
