@@ -20,6 +20,7 @@ import Routes from './routes.js'
 // Import App Component
 import App from './app';
 import SignIn from './pages/sign-in.vue'
+import SignUp from './pages/sign-up'
 
 // Init F7 Vue Plugin
 Vue.use(Framework7Vue, Framework7)
@@ -38,7 +39,7 @@ new Vue({
   },
   // Register App Component
   components: {
-    app: SignIn
+    app: SignUp
     // app: App
   }
 });
