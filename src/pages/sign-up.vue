@@ -65,9 +65,17 @@
 <script>
   import F7View from "framework7-vue/src/components/view";
   import Framework7 from 'framework7';
+  import F7Page from "framework7-vue/src/components/page";
+  import F7Navbar from "framework7-vue/src/components/navbar";
+  import F7List from "framework7-vue/src/components/list";
+  import F7Button from "framework7-vue/src/components/button";
+  import F7ListItem from "framework7-vue/src/components/list-item";
+  import F7Label from "framework7-vue/src/components/label";
+  import F7Input from "framework7-vue/src/components/input";
+  import F7Link from "framework7-vue/src/components/link";
 
   export default {
-    components: {F7View},
+    components: {F7Link, F7Input, F7Label, F7ListItem, F7Button, F7List, F7Navbar, F7Page, F7View},
     data () {
       return {
         disabled: true,
