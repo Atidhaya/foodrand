@@ -31,14 +31,14 @@
   },
   "homepage": "http://framework7.io/vue/",
   "dependencies": {
-    "f7": "^1.0.1",
     "firebase": "^5.0.4",
     "framework7": "^2.2.5",
     "framework7-icons": "^0.8.9",
     "framework7-vue": "^2.2.5",
     "material-design-icons": "^3.0.1",
-    "ssri": "^5.3.0",
+    "ssri": "^5.2.4",
     "vue": "^2.5.2",
+    "vuefire": "^1.4.5",
     "vuex": "^3.0.1"
   },
   "devDependencies": {

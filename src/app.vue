@@ -2,7 +2,7 @@
   <!-- App -->
   <div id="app">
 
-    <f7-button href="/sign-up/"> asda</f7-button>
+    <!--<f7-button href="/sign-up/"> asda</f7-button>-->
 
     <!-- Statusbar -->
     <f7-statusbar></f7-statusbar>
@@ -72,12 +72,20 @@
         </f7-page>
       </f7-view>
     </f7-login-screen>
-
   </div>
 </template>
 
 <script>
 import F7Button from "framework7-vue/src/components/button";
+import F7View from "framework7-vue/src/components/view";
+import CreateGroup from "./pages/create-group";
+import F7Tabs from "framework7-vue/src/components/tabs";
+import F7Tab from "framework7-vue/src/components/tab";
 
-export default {components: {F7Button}}
+export default {components: {
+    F7Tab,
+    F7Tabs,
+    CreateGroup,
+    F7View,
+    F7Button}}
 </script>

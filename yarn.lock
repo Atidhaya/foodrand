@@ -2276,12 +2276,6 @@ extract-text-webpack-plugin@^3.0.0:
     schema-utils "^0.3.0"
     webpack-sources "^1.0.1"
 
-f7@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/f7/-/f7-1.0.1.tgz#8782c83af1c66cf4fade607cc292c317162c8814"
-  dependencies:
-    jquery "^3.2.1"
-
 fast-deep-equal@^1.0.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/fast-deep-equal/-/fast-deep-equal-1.1.0.tgz#c053477817c86b51daa853c81e059b733d023614"
@@ -2435,13 +2429,13 @@ framework7-icons@^0.8.9:
   version "0.8.9"
   resolved "https://registry.yarnpkg.com/framework7-icons/-/framework7-icons-0.8.9.tgz#af94a6051be659f3f7b9d873fba6040c8fe72769"
 
-framework7-vue@^2.3.0:
+framework7-vue@^2.2.5:
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/framework7-vue/-/framework7-vue-2.3.0.tgz#fa9c81ab57b1f637441e8a418a0057cc8036152f"
 
-framework7@^2.3.1:
-  version "2.3.1"
-  resolved "https://registry.yarnpkg.com/framework7/-/framework7-2.3.1.tgz#a50ffc18117cf5c8840dba39348304f9e984085a"
+framework7@^2.2.5:
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/framework7/-/framework7-2.3.0.tgz#444602c3566faee901d9d04877a880c2f8bdd5e3"
   dependencies:
     dom7 "^2.0.6"
     path-to-regexp "^2.1.0"
@@ -3187,10 +3181,6 @@ isomorphic-fetch@2.2.1:
   dependencies:
     node-fetch "^1.0.1"
     whatwg-fetch ">=0.10.0"
-
-jquery@^3.2.1:
-  version "3.3.1"
-  resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.3.1.tgz#958ce29e81c9790f31be7792df5d4d95fc57fbca"
 
 js-base64@^2.1.9:
   version "2.4.5"
@@ -5158,12 +5148,6 @@ ssri@^5.2.4:
   dependencies:
     safe-buffer "^5.1.1"
 
-ssri@^5.3.0:
-  version "5.3.0"
-  resolved "https://registry.yarnpkg.com/ssri/-/ssri-5.3.0.tgz#ba3872c9c6d33a0704a7d71ff045e5ec48999d06"
-  dependencies:
-    safe-buffer "^5.1.1"
-
 stackframe@^1.0.3:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/stackframe/-/stackframe-1.0.4.tgz#357b24a992f9427cba6b545d96a14ed2cbca187b"
@@ -5639,6 +5623,10 @@ vue-template-es2015-compiler@^1.6.0:
 vue@^2.5.2:
   version "2.5.16"
   resolved "https://registry.yarnpkg.com/vue/-/vue-2.5.16.tgz#07edb75e8412aaeed871ebafa99f4672584a0085"
+
+vuefire@^1.4.5:
+  version "1.4.5"
+  resolved "https://registry.yarnpkg.com/vuefire/-/vuefire-1.4.5.tgz#2f31028b18f25e0f581bb68fb94b88302d62ebf8"
 
 vuex@^3.0.1:
   version "3.0.1"

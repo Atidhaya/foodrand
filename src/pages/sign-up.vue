@@ -114,6 +114,7 @@
           this.$f7.dialog.alert('Password mismatch, please double check');
         }
         else {
+          console.log(this.$store)
           this.$store.dispatch('signUp', { email: this.email, name: this.name, password: this.password })
           // this.$f7.router.load({url: "/sign-in/"})
           // this.$f7.router.navigate('/about/')
