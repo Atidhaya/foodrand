@@ -1,4 +1,5 @@
 <template>
+
   <f7-view id="sign-up">
     <f7-page>
       <f7-navbar title="Sign up" back-link="Back" ></f7-navbar>
@@ -26,36 +27,44 @@
 
 
         <div class="block">
-        <p><a class="link popup-open" href="#" data-popup=".popup-about">terms and condition</a></p>
+          <p><a class="link popup-open" href="#" data-popup=".popup-about">terms and condition</a></p>
         </div>
 
         <div class="popup popup-about">
           <div class="view popup-view">
             <div class="page">
               <div class="page-content block">
-              <p>Terms and Conditions</p>
-            <!-- Close Popup -->
-            <p>1. You agree that doggo is awesome</p>
+                <p>Terms and Conditions</p>
+                <!-- Close Popup -->
+                <p>1. You agree that doggo is awesome</p>
                 <p>2. You agree that doggo is also awesome</p>
                 <p>3. You agree that gaming is important</p>
 
-            <label class="checkbox"><input type="checkbox" v-on:change="agreement" ><i class="icon-checkbox"></i></label> I've read and agree on terms and condition
+                <label class="checkbox"><input type="checkbox" v-on:change="agreement" ><i class="icon-checkbox"></i></label> I've read and agree on terms and condition
                 <p><a class="link popup-close" href="#">back</a></p>
 
-                </div>
               </div>
+            </div>
           </div>
         </div>
 
 
         <p class="segmented">
-          <f7-button :disabled=disabled v-on:click="submit">Sign me up</f7-button>
+          <f7-button v-on:click="submit">Sign me up</f7-button>
         </p>
 
       </f7-list>
 
       <f7-link @click="$f7router.navigate('/about/')">About</f7-link>
       <f7-link href="/about/">About App</f7-link>
+
+
+      <f7-tab id="join-group" >
+        <f7-link @click="r()">go to j</f7-link>
+        <join-group> </join-group>
+
+      </f7-tab>
+
 
     </f7-page>
 
@@ -64,7 +73,6 @@
 </template>
 <script>
   import F7View from "framework7-vue/src/components/view";
-  import Framework7 from 'framework7';
   import F7Page from "framework7-vue/src/components/page";
   import F7Navbar from "framework7-vue/src/components/navbar";
   import F7List from "framework7-vue/src/components/list";
@@ -73,9 +81,11 @@
   import F7Label from "framework7-vue/src/components/label";
   import F7Input from "framework7-vue/src/components/input";
   import F7Link from "framework7-vue/src/components/link";
+  import F7Tab from "framework7-vue/src/components/tab";
+  import JoinGroup from "./join-group";
 
   export default {
-    components: {F7Link, F7Input, F7Label, F7ListItem, F7Button, F7List, F7Navbar, F7Page, F7View},
+    components: {JoinGroup, F7Tab, F7Link, F7Input, F7Label, F7ListItem, F7Button, F7List, F7Navbar, F7Page, F7View},
     data () {
       return {
         disabled: true,
@@ -83,7 +93,6 @@
         email: '',
         password: '',
         confirmpassword: ''
-
       }
     },
     mounted () {
@@ -100,34 +109,38 @@
       }
     },
     methods: {
-      agreement () {
+      agreement() {
         this.disabled = !this.disabled
         console.log(this.disabled)
       },
-      submit () {
+      submit() {
         console.log(this.name)
         console.log(this.email)
         console.log(this.password)
         console.log(this.confirmpassword)
         console.log(this.password === this.confirmpassword)
-        if ( this.password !== this.confirmpassword){
+        if (this.password !== this.confirmpassword) {
           this.$f7.dialog.alert('Password mismatch, please double check');
         }
         else {
-          console.log(this.$store)
-          this.$store.dispatch('signUp', { email: this.email, name: this.name, password: this.password })
+          // console.log(this.$store)
+          this.$store.dispatch('signUp', {email: this.email, name: this.name, password: this.password})
           // this.$f7.router.load({url: "/sign-in/"})
           // this.$f7.router.navigate('/about/')
           // this.$f7.router.load({url: "/sign-in/", animatePages: false})
           // this.$f7.router.navigate('/sign-in/')
           // this.$f7router.navigate('/sign-in')
           // this.$f7router.navigate({url: '/about/'})
-          console.log(this)
-          this.$f7router.navigate("/about/")
+          // console.log(this)
+          // this.$f7router.navigate('/about/')
           // this.main.view.router.navigate('/about/')
           console.log('sign up success')
         }
+      },
+      r() {
+        console.log(this)
+        this.$f7router.navigate('/jasdasd/')
       }
-    },
+    }
   }
 </script>

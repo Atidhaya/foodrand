@@ -126,6 +126,7 @@
   <!--</f7-page>-->
 
 </template>
+
 <script>
 import F7Page from "framework7-vue/src/components/page";
 import F7Row from "framework7-vue/src/components/row";
@@ -192,7 +193,9 @@ export default {components: {
   methods: {
     r(){
       console.log(this)
-      this.$f7router.navigate('/jasdasd/')
+      // this.$f7router.navigate('/jasdasd/')
+      this.$store.dispatch('pushMe')
+      // this.$store.dispatch('signUp', {email: 'emaru', name: 'pan', password: 'pansecure'})
     },
     leaveGroup( id ){
       console.log('DELETE',id)

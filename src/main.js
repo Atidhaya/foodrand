@@ -7,6 +7,8 @@ import Framework7 from 'framework7/dist/framework7.esm.bundle.js';
 // Import F7 Vue Plugin
 import Framework7Vue from 'framework7-vue/dist/framework7-vue.esm.bundle.js';
 
+
+
 // Import F7 Styles
 import Framework7Styles from 'framework7/dist/css/framework7.css';
 
@@ -21,23 +23,22 @@ import VueFire from 'vuefire';
 // Import Routes
 import Routes from './routes.js'
 
-import signUp from './pages/sign-up'
-
-import {store} from "./store";
-
 // Import App Component
 import App from './app';
+import signUp from './pages/sign-up'
 import gd from './pages/group-dashboard.vue'
-
+import shittyassframework from './pages/shittyassframework'
+import {store} from "./store";
 // Init F7 Vue Plugin
 Vue.use(Framework7Vue, Framework7)
 
 // Init VueFire
 Vue.use(VueFire)
 
+console.log("Sign me up boi",signUp)
 
 // Init App
-new Vue({
+export default new Vue({
   el: '#app',
   template: '<app/>',
   store,
@@ -52,6 +53,12 @@ new Vue({
   // Register App Component
   components: {
     // app: gd
-    app: signUp
+    app: App
   }
+  // methods: {
+  //   onF7Ready(f7) {
+  //     f7.router.navigate('/sign-up/')
+  //     console.log('test')
+  //   }
+  // }
 });
