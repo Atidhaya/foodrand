@@ -20,22 +20,30 @@ import Routes from './routes.js'
 // Import App Component
 import App from './app';
 import SignIn from './pages/sign-in.vue'
+import { store } from './store'
+import firebase from './firebase.js'
+
 import SignUp from './pages/sign-up'
 
 // Init F7 Vue Plugin
 Vue.use(Framework7Vue, Framework7)
 
+const unsubscribe = firebase.auth()
+
+
+
 // Init App
 new Vue({
   el: '#app',
   template: '<app/>',
+  store,
   // Init Framework7 by passing parameters here
   framework7: {
     id: 'io.framework7.testapp', // App bundle ID
     name: 'Framework7', // App name
     theme: 'auto', // Automatic theme detection
     // App routes
-    routes: Routes,
+    routes: Routes
   },
   // Register App Component
   components: {
