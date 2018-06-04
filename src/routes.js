@@ -9,6 +9,9 @@ import SignUp from './pages/sign-up.vue'
 import PanelLeftPage from './pages/panel-left.vue';
 import PanelRightPage from './pages/panel-right.vue';
 
+
+import join from './pages/join-group.vue'
+
 export default [
   {
     path: '/',
@@ -42,6 +45,10 @@ export default [
   {
     path: '/dynamic-route/blog/:blogId/post/:postId/',
     component: DynamicRoutePage,
+  },
+  {
+    path: '/j/',
+    component: join ,
   },
   {
     path: '(.*)',

@@ -1,9 +1,10 @@
 <template xmlns:>
   <f7-page color-theme="orange">
 
-  <f7-tabs animated>
+  <f7-tabs swipeable animated>
     <f7-tab id="create-group" tab-active>
     <create-group></create-group>
+
     </f7-tab>
 
     <f7-tab id="home">
@@ -51,11 +52,12 @@
 
     </f7-tab>
     <f7-tab id="join-group" >
-
+      <f7-link @click="r()">go to j</f7-link>
       <join-group></join-group>
 
     </f7-tab>
   </f7-tabs>
+
 
   <f7-toolbar tabbar labels>
     <f7-link icon="icon-add" text="New group" tab-link="#create-group" ></f7-link>
@@ -64,6 +66,11 @@
 
   </f7-toolbar>
 
+    <!--<f7-button @click="closePopup()">Back</f7-button>-->
+    <f7-popup :opened= popupOpen @popup:close="closePopup()" >
+      <f7-button @click="closePopup()">Back</f7-button>
+      <group-dashboard :gid= groupTarget  @closePopup="closePopup"  ></group-dashboard>
+    </f7-popup>
 
   </f7-page>
 
@@ -137,10 +144,20 @@ import F7Icon from "framework7-vue/src/components/icon";
 import CreateGroup from "./create-group";
 import JoinGroup from "./join-group";
 import F7View from "framework7-vue/src/components/view";
+import F7Popup from "framework7-vue/src/components/popup";
+import F7Button from "framework7-vue/src/components/button";
+import GroupDashboard from "./group-dashboard";
+import F7Tab from "framework7-vue/src/components/tab";
+import F7Tabs from "framework7-vue/src/components/tabs";
 
 
 
 export default {components: {
+    F7Tabs,
+    F7Tab,
+    GroupDashboard,
+    F7Button,
+    F7Popup,
     F7View,
     JoinGroup,
     CreateGroup,
@@ -161,21 +178,32 @@ export default {components: {
   },
   data () {
     return {
-        items: [{gid: 1, name: 'group 1',
+        items: [{gid: '1', name: 'group 1',
           info: 'Food and stuff'},
-          {gid: 2, name: 'group 2',
+          {gid: '2', name: 'group 2',
             info: 'Games'},
-          {gid: 3, name: 'group 3',
+          {gid: '3', name: 'group 3',
             info: 'whatever'}],
+      popupOpen: false,
+      groupTarget: '',
       vlData: {},
     }
   },
   methods: {
+    r(){
+      console.log(this)
+      this.$f7router.navigate('/jasdasd/')
+    },
     leaveGroup( id ){
-      console.log('DELETE')
+      console.log('DELETE',id)
     },
     selectGroup( id, name ){
       console.log('SELECT',id,name)
+      this.popupOpen = true
+      this.groupTarget = id
+    },
+    closePopup(){
+      this.popupOpen = false
     },
     searchList (query, items) {
       var found = [];

@@ -23,7 +23,7 @@ import Routes from './routes.js'
 
 // Import App Component
 import App from './app';
-import SignIn from './pages/sign-in.vue'
+import gd from './pages/group-dashboard.vue'
 
 // Init F7 Vue Plugin
 Vue.use(Framework7Vue, Framework7)
@@ -45,7 +45,7 @@ new Vue({
   },
   // Register App Component
   components: {
-    // app: SignIn
+    // app: gd
     app: App
   }
 });
