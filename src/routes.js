@@ -3,9 +3,8 @@ import AboutPage from './pages/about.vue';
 import FormPage from './pages/form.vue';
 import DynamicRoutePage from './pages/dynamic-route.vue';
 import NotFoundPage from './pages/not-found.vue';
-import SignIn from './pages/sign-in.vue'
-import SignUp from './pages/sign-up.vue'
-import shittyassframework from './pages/shittyassframework'
+import SignIn from './authentication/sign-in.vue'
+import SignUp from './authentication/sign-up.vue'
 
 import PanelLeftPage from './pages/panel-left.vue';
 import PanelRightPage from './pages/panel-right.vue';
@@ -50,10 +49,6 @@ export default [
   {
     path: '/j/',
     component: join ,
-  },
-  {
-    path: '/shit/',
-    component: shittyassframework,
   },
   {
     path: '(.*)',

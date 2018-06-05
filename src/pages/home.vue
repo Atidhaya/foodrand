@@ -52,7 +52,6 @@
 
     </f7-tab>
     <f7-tab id="join-group" >
-      <f7-link @click="r()">go to j</f7-link>
       <join-group></join-group>
 
     </f7-tab>
@@ -189,6 +188,9 @@ export default {components: {
       groupTarget: '',
       vlData: {},
     }
+  },
+  mounted () {
+    console.log(this.$store.state.user)
   },
   methods: {
     r(){

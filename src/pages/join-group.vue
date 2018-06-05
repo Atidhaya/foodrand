@@ -1,7 +1,32 @@
 <template>
   <f7-view>
   <f7-page>
-    JOIN GROUP
+
+    <div class="page-content">
+
+      <p> <img data-src="/static/backup.png" class="lazy lazy-fade-in picture-center"/></p>
+
+      <f7-list no-hairlines-md>
+
+
+        <f7-list form>
+
+          <f7-list-item>
+            <f7-icon icon-f7="demo-list-icon" slot="media"></f7-icon>
+            <f7-input :value="code" @input="code = $event.target.value"  type="text" placeholder="Group code here...!" clear-button></f7-input>
+
+
+          </f7-list-item>
+        </f7-list>
+
+      </f7-list>
+
+      <p class="segmented">
+        <f7-button :disabled=disabled v-on:click="join" class="loader" >Join group!</f7-button>
+      </p>
+
+    </div>
+
   </f7-page>
   </f7-view>
 </template>
@@ -20,10 +45,13 @@
   import F7Searchbar from "framework7-vue/src/components/searchbar";
   import F7Link from "framework7-vue/src/components/link";
   import F7Icon from "framework7-vue/src/components/icon";
-
+  import F7View from "framework7-vue/src/components/view";
+  import F7Input from "framework7-vue/src/components/input";
 
 
   export default {components: {
+      F7Input,
+      F7View,
       F7Icon,
       F7Link,
       F7Searchbar,
@@ -41,29 +69,36 @@
     },
     data () {
       return {
-        items: [{name: 'group 1',
-          info: 'Food and stuff'},
-          {name: 'group 2',
-            info: 'Games'},
-          {name: 'group 3',
-            info: 'whatever'}],
-        vlData: {},
+        code: '',
+        disabled: true
       }
     },
     methods: {
-      deleteGroup(){
-        console.log('DELETE')
-      },
-      searchList (query, items) {
-        var found = [];
-        for (var i = 0; i < items.length; i += 1) {
-          if (items[i].title.toLowerCase().indexOf(query) >= 0 || query.trim() === '') found.push(i);
+      join() {
+
+      }
+    },
+    watch: {
+      code: function () {
+        console.log(this.code)
+        if (this.code !== '') {
+          this.disabled = false
         }
-        return found; // return array with mathced indexes
-      },
-      renderExternal(vl, vlData) {
-        this.vlData = vlData;
-      },
+      }
     }
   }
 </script>
+
+<style>
+  .picture-center {
+    position: absolute;
+    top: 7%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: block;
+
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+  }
+</style>

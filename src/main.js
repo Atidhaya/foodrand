@@ -7,6 +7,9 @@ import Framework7 from 'framework7/dist/framework7.esm.bundle.js';
 // Import F7 Vue Plugin
 import Framework7Vue from 'framework7-vue/dist/framework7-vue.esm.bundle.js';
 
+import {auth} from './firebase'
+
+import 'framework7-icons';
 
 
 // Import F7 Styles
@@ -25,9 +28,7 @@ import Routes from './routes.js'
 
 // Import App Component
 import App from './app';
-import signUp from './pages/sign-up'
-import gd from './pages/group-dashboard.vue'
-import shittyassframework from './pages/shittyassframework'
+import signUp from './authentication/sign-up'
 import {store} from "./store";
 // Init F7 Vue Plugin
 Vue.use(Framework7Vue, Framework7)
@@ -35,7 +36,7 @@ Vue.use(Framework7Vue, Framework7)
 // Init VueFire
 Vue.use(VueFire)
 
-console.log("Sign me up boi",signUp)
+// console.log("Sign me up boi",signUp)
 
 // Init App
 export default new Vue({
@@ -49,16 +50,29 @@ export default new Vue({
     theme: 'auto', // Automatic theme detection
     // App routes
     routes: Routes,
-  },
+    dialog: {
+      // set default title for all dialog shortcuts
+      title: 'Foodrand'
+    },
+    touch: {
+      disableContextMenu: false
+    }
+},
   // Register App Component
   components: {
     // app: gd
     app: App
+  },
+  methods: {
+    onF7Ready(f7) {
+      auth.onAuthStateChanged((firebaseUser) => {
+        if (firebaseUser) {
+          store.dispatch("autoSignIn", firebaseUser)
+        }
+        else {
+          f7.router.navigate('/sign-in/')
+        }
+      })
+    }
   }
-  // methods: {
-  //   onF7Ready(f7) {
-  //     f7.router.navigate('/sign-up/')
-  //     console.log('test')
-  //   }
-  // }
 });

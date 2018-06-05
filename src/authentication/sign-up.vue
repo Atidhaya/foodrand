@@ -2,7 +2,10 @@
 
   <f7-view id="sign-up">
     <f7-page>
-      <f7-navbar title="Sign up" back-link="Back" ></f7-navbar>
+      <f7-navbar>
+        <f7-link href="/sign-in/">Back</f7-link>
+      </f7-navbar>
+
       <f7-list form>
         <f7-list-item>
           <f7-label>Name</f7-label>
@@ -50,20 +53,20 @@
 
 
         <p class="segmented">
-          <f7-button v-on:click="submit">Sign me up</f7-button>
+          <f7-button :disabled=disabled v-on:click="submit">Sign me up</f7-button>
         </p>
 
       </f7-list>
 
-      <f7-link @click="$f7router.navigate('/about/')">About</f7-link>
-      <f7-link href="/about/">About App</f7-link>
+      <!--<f7-link @click="$f7router.navigate('/about/')">About</f7-link>-->
+      <!--<f7-link href="/about/">About App</f7-link>-->
 
 
-      <f7-tab id="join-group" >
-        <f7-link @click="r()">go to j</f7-link>
-        <join-group> </join-group>
+      <!--<f7-tab id="join-group" >-->
+        <!--<f7-link @click="r()">go to j</f7-link>-->
+        <!--<join-group> </join-group>-->
 
-      </f7-tab>
+      <!--</f7-tab>-->
 
 
     </f7-page>
@@ -82,7 +85,7 @@
   import F7Input from "framework7-vue/src/components/input";
   import F7Link from "framework7-vue/src/components/link";
   import F7Tab from "framework7-vue/src/components/tab";
-  import JoinGroup from "./join-group";
+  import JoinGroup from "../pages/join-group";
 
   export default {
     components: {JoinGroup, F7Tab, F7Link, F7Input, F7Label, F7ListItem, F7Button, F7List, F7Navbar, F7Page, F7View},
@@ -114,27 +117,19 @@
         console.log(this.disabled)
       },
       submit() {
-        console.log(this.name)
-        console.log(this.email)
-        console.log(this.password)
-        console.log(this.confirmpassword)
+        this.$store.dispatch('pushMe')
         console.log(this.password === this.confirmpassword)
         if (this.password !== this.confirmpassword) {
           this.$f7.dialog.alert('Password mismatch, please double check');
         }
+        else if (this.name === '') {
+          this.$f7.dialog.alert('Please enter your name')
+        }
+        else if (this.email === '') {
+          this.$f7.dialog.alert('Please enter your email')
+        }
         else {
-          // console.log(this.$store)
           this.$store.dispatch('signUp', {email: this.email, name: this.name, password: this.password})
-          // this.$f7.router.load({url: "/sign-in/"})
-          // this.$f7.router.navigate('/about/')
-          // this.$f7.router.load({url: "/sign-in/", animatePages: false})
-          // this.$f7.router.navigate('/sign-in/')
-          // this.$f7router.navigate('/sign-in')
-          // this.$f7router.navigate({url: '/about/'})
-          // console.log(this)
-          // this.$f7router.navigate('/about/')
-          // this.main.view.router.navigate('/about/')
-          console.log('sign up success')
         }
       },
       r() {
