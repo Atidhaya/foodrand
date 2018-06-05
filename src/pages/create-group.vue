@@ -5,8 +5,7 @@
 
       <p> <img data-src="/static/goahead.png" class="lazy lazy-fade-in picture-center"/></p>
 
-
-    <f7-list no-hairlines-md>
+      <f7-list no-hairlines-md>
 
 
       <f7-list form>
