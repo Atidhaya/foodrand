@@ -2,6 +2,7 @@
   <f7-view>
   <f7-page>
     JOIN GROUP
+    <f7-link @click="r()">go to j</f7-link>
   </f7-page>
   </f7-view>
 </template>
@@ -20,10 +21,12 @@
   import F7Searchbar from "framework7-vue/src/components/searchbar";
   import F7Link from "framework7-vue/src/components/link";
   import F7Icon from "framework7-vue/src/components/icon";
+  import F7View from "framework7-vue/src/components/view";
 
 
 
   export default {components: {
+      F7View,
       F7Icon,
       F7Link,
       F7Searchbar,
@@ -51,6 +54,10 @@
       }
     },
     methods: {
+      r(){
+        console.log(this)
+        this.$f7router.navigate('/about/')
+      },
       deleteGroup(){
         console.log('DELETE')
       },

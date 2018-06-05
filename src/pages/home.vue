@@ -1,13 +1,14 @@
 <template xmlns:>
-  <f7-page color-theme="orange">
-
+  <f7-page color-theme="orange" >
+    <!--swipeable-->
   <f7-tabs swipeable animated>
-    <f7-tab id="create-group" tab-active>
+    <f7-tab id="create-group" >
     <create-group></create-group>
 
     </f7-tab>
 
-    <f7-tab id="home">
+    <f7-tab id="home" tab-active>
+      <f7-link @click="r()">go to j</f7-link>
       <f7-row >
         <f7-col >
           <div class="swiper-container swiper-init demo-swiper" data-pagination='{"el": ".swiper-pagination"}'>
@@ -33,7 +34,13 @@
           search-container="#search-list"
           search-item="li"
           search-in=".item-title"
+
         ></f7-searchbar>
+        <!--Loading Symbol, Will be disable when groups is loaded-->
+        <f7-popover :opened= loading >
+          <f7-preloader color="orange" size="44px"></f7-preloader>
+        </f7-popover>
+
         <!-- Will be visible if there is no any results found, defined by "searchbar-not-found" class -->
         <f7-list class="searchbar-not-found">
           <f7-list-item title="Nothing found"></f7-list-item>
@@ -41,14 +48,16 @@
 
         <!-- Search through this list -->
         <f7-list class="searchbar-found" id="search-list">
-          <f7-list-item swipeout v-for="item in items"  :title="item.name" @click="selectGroup(item.gid,item.name)" @swipeout:deleted="leaveGroup">
-            <f7-swipeout-actions>
-              <f7-swipeout-button delete>Delete</f7-swipeout-button>
-            </f7-swipeout-actions>
+          <!--:title="group.name"-->
+          <f7-list-item  v-for="group in groups"   @swipeout:deleted="leaveGroup">
+            <p @click="selectGroup(group['.key'],group.name)" >{{group.name}}</p>
+            <f7-button @click="leaveGroup(group['.key'])">Leave</f7-button>
+            <!--<f7-swipeout-actions>-->
+              <!--<f7-swipeout-button delete>Delete</f7-swipeout-button>-->
+            <!--</f7-swipeout-actions>-->
           </f7-list-item>
         </f7-list>
       </f7-block>
-
 
     </f7-tab>
     <f7-tab id="join-group" >
@@ -60,10 +69,9 @@
 
 
   <f7-toolbar tabbar labels>
-    <f7-link icon="icon-add" text="New group" tab-link="#create-group" ></f7-link>
-    <f7-link icon="icon-home" text="Home" tab-link="#home" ></f7-link>
-    <f7-link icon="icon-login" text="Join group" tab-link="#join-group" ></f7-link>
-
+    <f7-link icon-f7="icon-add" text="New group" tab-link="#create-group" ></f7-link>
+    <f7-link  icon-f7="icon-home" text="Home" tab-link="#home" tab-link-active ></f7-link>
+    <f7-link icon-f7="icon-login" text="Join group" tab-link="#join-group" ></f7-link>
   </f7-toolbar>
 
     <!--<f7-button @click="closePopup()">Back</f7-button>-->
@@ -149,10 +157,15 @@ import F7Button from "framework7-vue/src/components/button";
 import GroupDashboard from "./group-dashboard";
 import F7Tab from "framework7-vue/src/components/tab";
 import F7Tabs from "framework7-vue/src/components/tabs";
+import {db,auth} from '../firebase.js';
+import F7Preloader from "framework7-vue/src/components/preloader";
+import F7Popover from "framework7-vue/src/components/popover";
 
 
 
 export default {components: {
+    F7Popover,
+    F7Preloader,
     F7Tabs,
     F7Tab,
     GroupDashboard,
@@ -184,18 +197,68 @@ export default {components: {
             info: 'Games'},
           {gid: '3', name: 'group 3',
             info: 'whatever'}],
+      groupList: [],
+      loading: true,
       popupOpen: false,
       groupTarget: '',
       vlData: {},
     }
   },
+  firebase: function () {
+    return {
+      groups:{
+        source: db.ref('/groups/')
+      },
+      users:{
+        source: db.ref('/users/')
+      }
+    }
+  },
   methods: {
     r(){
-      console.log(this)
-      this.$f7router.navigate('/jasdasd/')
+      // console.log(this)
+      console.log(this.users);
+      // this.$f7router.navigate('/j/')
+      this.updateGroupList()
     },
-    leaveGroup( id ){
-      console.log('DELETE',id)
+    updateGroupList (){
+      // const uid = this.$store.state.user.uid
+      // const uid ="6oJhVsJRpmgY4yFMQthMs9JzZXj1"
+      let temp =[]
+      const uid = "bsbbteLSIMOg4vhIuZa1m91LZRe2"
+      const userInfo = this.users.filter(user => user['.key'] === uid)[0]
+      // if(userInfo.)
+      //If user is in a group
+      console.log(userInfo.groups)
+      if(userInfo.groups !== undefined){
+        console.log(userInfo.groups)
+        // let iter = userInfo.groups.values()
+        for (let userGroup in userInfo.groups) {
+          // const groupKey = userGroup['.key']
+          console.log(groups[groupKey])
+        }
+        // for(let i = 0; i<userInfo.groups.length; i++){
+        //   const groupKey = userInfo.groups[i]['.key']
+        //   console.log(groups[groupKey])
+        //   // temp.push(groups[groupKey])
+        // }
+
+        // temp = this.groups.filter(group =>
+        //   userInfo.groups.some(userGroup =>
+        //     userGroup['.key'] === group['.key']))
+      }
+      // let temp = this.
+
+      // this.groupList = temp
+    },
+    leaveGroup( gid ){
+      const uid = this.$store.state.user.uid
+      this.$firebaseRefs.groups.child(gid).child('members').child(uid).remove()
+      console.log("Delete Member ... ", uid ,' in ' , gid)
+      //Access that member group list and set flag group
+      this.$firebaseRefs.all.child('users').child(uid).child('groups').child(gid).remove()
+      console.log('Leave',gid)
+      // this.updatePlacesAndMembers()
     },
     selectGroup( id, name ){
       console.log('SELECT',id,name)
@@ -215,6 +278,11 @@ export default {components: {
     renderExternal(vl, vlData) {
       this.vlData = vlData;
     },
+  },
+  watch: {
+    groups() {
+
+    }
   }
 }
 </script>

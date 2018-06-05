@@ -23,7 +23,6 @@ import Routes from './routes.js'
 
 // Import App Component
 import App from './app';
-import gd from './pages/group-dashboard.vue'
 
 // Init F7 Vue Plugin
 Vue.use(Framework7Vue, Framework7)
@@ -32,7 +31,7 @@ Vue.use(Framework7Vue, Framework7)
 Vue.use(VueFire)
 
 // Init App
-new Vue({
+export default new Vue({
   el: '#app',
   template: '<app/>',
   // Init Framework7 by passing parameters here
@@ -45,7 +44,7 @@ new Vue({
   },
   // Register App Component
   components: {
-    // app: gd
+    // app: b
     app: App
   }
 });
