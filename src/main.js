@@ -9,7 +9,7 @@ import Framework7Vue from 'framework7-vue/dist/framework7-vue.esm.bundle.js';
 
 import {auth} from './firebase'
 
-import 'framework7-icons';
+// import 'framework7-icons';
 
 
 // Import F7 Styles

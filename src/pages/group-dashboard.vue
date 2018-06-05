@@ -16,9 +16,12 @@
     <f7-button outline color="green" fill raised big>Let's go eat!</f7-button>
 
       <f7-tabs swipeable animated>
+
         <f7-tab id="members" tab-active>
           <f7-block inset>
-          <p>MEMBERS</p>
+            <h1 class="gid" >{{this.gid}}</h1>
+            <!--<h2 class="gid" >hhhhhhjhhhkjhkjhkjhjkhjkhkjhjkkjhk</h2>-->
+            <p>MEMBERS</p>
             <f7-list contacts-list v-for="member in members"  >
               <f7-list-item :title="member.name" @click="openPopover(member.name,member.uid,'user')"></f7-list-item>
             </f7-list>
@@ -288,3 +291,17 @@
     }
   }
 </script>
+
+<style>
+  .gid {
+    position: absolute;
+    top: 7%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: block;
+
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+  }
+</style>
