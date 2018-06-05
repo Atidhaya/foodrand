@@ -48,6 +48,18 @@
       </f7-view>
     </f7-popup>
 
+    <!--<f7-popup>-->
+      <!--<f7-view id="sign-in" url="/sign-in/" ></f7-view>-->
+    <!--</f7-popup>-->
+
+
+    <!--<f7-popup>-->
+      <!--<f7-view id="sign-up" url="/sign-up/" ></f7-view>-->
+    <!--</f7-popup>-->
+
+
+
+
     <!-- Login Screen -->
     <f7-login-screen id="login-screen">
       <f7-view>
@@ -81,8 +93,12 @@ import F7View from "framework7-vue/src/components/view";
 import CreateGroup from "./pages/create-group";
 import F7Tabs from "framework7-vue/src/components/tabs";
 import F7Tab from "framework7-vue/src/components/tab";
+import F7Popup from "framework7-vue/src/components/popup";
+import SignIn from "./authentication/sign-in";
 
 export default {components: {
+    SignIn,
+    F7Popup,
     F7Tab,
     F7Tabs,
     CreateGroup,

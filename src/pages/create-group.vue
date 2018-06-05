@@ -1,7 +1,34 @@
 <template>
   <f7-view>
   <f7-page>
-    CREATE GROUP
+    <div class="page-content">
+
+      <p> <img data-src="/static/goahead.png" class="lazy lazy-fade-in picture-center"/></p>
+
+
+    <f7-list no-hairlines-md>
+
+
+      <f7-list form>
+
+        <f7-list-item>
+          <f7-icon icon-f7="demo-list-icon" slot="media"></f7-icon>
+        <f7-input :value="tempname" @input="tempname = $event.target.value"  type="text" placeholder="Group name" clear-button></f7-input>
+
+          <!--<f7-preloader color="green" size="44px"></f7-preloader>-->
+
+
+        </f7-list-item>
+      </f7-list>
+
+    </f7-list>
+
+    <p class="segmented">
+      <f7-button :disabled=disabled v-on:click="createGroup" class="loader" >Create</f7-button>
+    </p>
+
+    </div>
+
   </f7-page>
   </f7-view>
 </template>
@@ -21,10 +48,12 @@
   import F7Link from "framework7-vue/src/components/link";
   import F7Icon from "framework7-vue/src/components/icon";
   import F7View from "framework7-vue/src/components/view";
+  import {db, auth} from '../firebase'
 
 
 
-  export default {components: {
+  export default {
+    components: {
       F7View,
       F7Icon,
       F7Link,
@@ -43,29 +72,77 @@
     },
     data () {
       return {
-        items: [{name: 'group 1',
-          info: 'Food and stuff'},
-          {name: 'group 2',
-            info: 'Games'},
-          {name: 'group 3',
-            info: 'whatever'}],
-        vlData: {},
+        tempname: '',
+        usergroup: {
+          name: '',
+          active: true,
+          gid: '',
+        },
+        dbgroup: {
+          members: [],
+          places: [],
+          start: false,
+          name: ''
+        },
+        user: {
+          name: '',
+          uid: ''
+        },
+        disabled: true
+      }
+    },
+    firebase: function () {
+      return {
+        user: {
+          source: db.ref('users/' + this.$store.state.user.uid)
+        }
       }
     },
     methods: {
-      deleteGroup(){
-        console.log('DELETE')
+      createGroup() {
+        this.usergroup.name = this.tempname
+        this.user.name = this.$store.state.user.displayName
+        this.user.uid = this.$store.state.user.uid
+        this.dbgroup.members.push(this.user)
+        this.dbgroup.name = this.tempname
+        const ukey = db.ref('users/' + this.$store.state.user.uid + '/groups/').push(this.usergroup).getKey()
+        db.ref('users/' + this.$store.state.user.uid + '/groups/').child(ukey).update({'gid': ukey})
+        this.dbgroup.gid = ukey
+        db.ref('groups/' + ukey).set(this.dbgroup)
+        this.clear()
+        this.$f7.dialog.alert('Create success! You can check your group id in home menu')
       },
-      searchList (query, items) {
-        var found = [];
-        for (var i = 0; i < items.length; i += 1) {
-          if (items[i].title.toLowerCase().indexOf(query) >= 0 || query.trim() === '') found.push(i);
+      clear() {
+        this.usergroup.name = ''
+        this.usergroup.gid = ''
+        this.dbgroup.members = []
+        this.dbgroup.places = []
+        this.dbgroup.gid = ''
+        this.dbgroup.name = ''
+        console.log('clear input!')
+      }
+    },
+    watch: {
+      tempname: function () {
+        console.log(this.tempname)
+        if (this.tempname !== '') {
+          this.disabled = false
         }
-        return found; // return array with mathced indexes
-      },
-      renderExternal(vl, vlData) {
-        this.vlData = vlData;
-      },
+      }
     }
   }
 </script>
+
+<style>
+  .picture-center {
+    position: absolute;
+    top: 7%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: block;
+
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+  }
+</style>
