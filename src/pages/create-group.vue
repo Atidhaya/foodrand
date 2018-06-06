@@ -14,8 +14,6 @@
           <f7-icon icon-f7="demo-list-icon" slot="media"></f7-icon>
         <f7-input :value="tempname" @input="tempname = $event.target.value"  type="text" placeholder="Group name" clear-button></f7-input>
 
-          <!--<f7-preloader color="green" size="44px"></f7-preloader>-->
-
 
         </f7-list-item>
       </f7-list>
@@ -116,7 +114,7 @@
         this.dbgroup.gid = ukey
         db.ref('groups/'+ukey).set(this.dbgroup)
         this.clear()
-        this.$f7.dialog.alert('Create success! You can check your group id in home menu')
+        this.$f7.dialog.alert('Create success! You can check your group id in home menu ヾ(＾∇＾)')
       },
       clear() {
         this.usergroup.name = ''

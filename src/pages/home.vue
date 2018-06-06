@@ -1,6 +1,5 @@
 <template xmlns:>
-
-  <f7-page  color-theme="orange" >
+  <f7-page color-theme="orange" class="nopadding">
     <!--swipeable-->
   <f7-tabs swipeable animated>
     <f7-tab id="create-group" >
@@ -367,5 +366,8 @@ export default {components: {
   /*}*/
   .statusbar {
     background: pink;
+  }
+  .nopadding {
+    padding: 0;
   }
 </style>

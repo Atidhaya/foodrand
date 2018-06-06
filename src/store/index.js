@@ -41,12 +41,14 @@ export const store = new Vuex.Store({
       auth.createUserWithEmailAndPassword(payload.email, payload.password)
         .then(firebaseUser => {
           console.log('In sign up.............')
-          commit('setUser', {email: firebaseUser.email})
-          auth.currentUser.updateProfile({ displayName: payload.name })
-          console.log('name:' ,payload.name)
-          db.ref('users/' + auth.currentUser.uid).set({ email: payload.email, name: payload.name })
-          commit('setLoading', false)
-          location.reload()
+          auth.currentUser.updateProfile({ displayName: payload.name }).then( () => {
+            commit('setUser', {email: firebaseUser.email})
+            console.log('name:' ,payload.name)
+            console.log(auth.currentUser.displayName)
+            db.ref('users/' + auth.currentUser.uid).set({ email: payload.email, name: payload.name })
+            commit('setLoading', false)
+            location.reload()
+          })
           // main.$f7.router.navigate('/sign-in/')
         })
         .catch(error => {
@@ -67,8 +69,7 @@ export const store = new Vuex.Store({
           commit('setUser', {email: firebaseUser.email})
           commit('setLoading', false)
           commit('setError', null)
-          // location.reload()
-          // success = true
+          console.log(auth.currentUser.displayName)
           this.$f7.router.navigate('/')
         })
         .catch(error => {
@@ -82,6 +83,7 @@ export const store = new Vuex.Store({
     autoSignIn ({commit}, payload) {
       commit('setUser', payload)
       console.log(this.state.user)
+      console.log(auth.currentUser.displayName)
     },
     userSignOut ({commit}) {
       auth.signOut()

@@ -78,32 +78,50 @@
       return {
         allgroups: {
           source: db.ref('groups/')
+        },
+        mygroups: {
+          source: db.ref('users/' + auth.currentUser.uid + '/groups')
         }
       }
     },
     methods: {
       join() {
         var temp = []
+        let gname = ''
         var shortid = require('shortid')
         if (shortid.isValid(this.code)) {
           for (let i = 0; i < this.allgroups.length; i++) {
             if (this.allgroups[i].code === this.code) {
-              db.ref('groups/' + this.allgroups[i]['.key']).once('value').then(function (snapshot) {
-                console.log(snapshot.val().members)
-                temp = snapshot.val().members
-              }).then( () => {
-                console.log(this.$store.state.user.displayName)
-                const user = {name: auth.currentUser.displayName, uid: auth.currentUser.uid}
-                console.log(user)
-                temp.push(user)
-                // db.ref('groups/' + key + '/members').set(temp)
-              })
+              // console.log(this.mygroups)
+              // console.log(this.mygroups[0])
+              // console.log(this.mygroups[0].code)
+              if (this.mygroups.some(c => c.code === this.code)) {
+                this.$f7.dialog.alert('You\'re already in this group (✖╭╮✖) ')
+              }
+              else {
+                db.ref('groups/' + this.allgroups[i]['.key']).once('value').then(function (snapshot) {
+                  temp = snapshot.val().members
+                  gname = snapshot.val().name
+                  console.log('before add:', temp)
+                }).then(() => {
+                  console.log(this.$store.state.user.displayName)
+                  const user = {name: auth.currentUser.displayName, uid: auth.currentUser.uid}
+                  temp.push(user)
+                  console.log('add members:', temp)
+                  db.ref('groups/' + this.allgroups[i]['.key']).child('members').set(temp)
+                  db.ref('users/' + this.$store.state.user.uid + '/groups/' + this.allgroups[i]['.key']).set({
+                    'name': gname,
+                    'active': true,
+                    'gid': this.allgroups[i]['.key'],
+                    'code': this.code})
+                  this.$f7.dialog.alert('join success! ヾ（〃＾∇＾）ﾉ♪')
+                })
+              }
             }
           }
-          this.$f7.dialog.alert('valid!')
         }
         else {
-          this.$f7.dialog.alert('invalid code group!')
+          this.$f7.dialog.alert('invalid code group! (✖╭╮✖)')
         }
       }
     },
