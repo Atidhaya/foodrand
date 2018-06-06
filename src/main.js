@@ -39,40 +39,47 @@ Vue.use(VueFire)
 // console.log("Sign me up boi",signUp)
 
 // Init App
-export default new Vue({
-  el: '#app',
-  template: '<app/>',
-  store,
-  // Init Framework7 by passing parameters here
-  framework7: {
-    id: 'io.framework7.testapp', // App bundle ID
-    name: 'Framework7', // App name
-    theme: 'auto', // Automatic theme detection
-    // App routes
-    routes: Routes,
-    dialog: {
-      // set default title for all dialog shortcuts
-      title: 'Foodrand'
+
+const unsubscribe = auth.onAuthStateChanged((firebaseUser) => {
+  new Vue({
+    el: '#app',
+    template: '<app/>',
+    store,
+    // Init Framework7 by passing parameters here
+    framework7: {
+      id: 'io.framework7.testapp', // App bundle ID
+      name: 'Framework7', // App name
+      theme: 'auto', // Automatic theme detection
+      // App routes
+      routes: Routes,
+      dialog: {
+        // set default title for all dialog shortcuts
+        title: 'Foodrand'
+      },
+      touch: {
+        disableContextMenu: false
+      }
     },
-    touch: {
-      disableContextMenu: false
+    // Register App Component
+    components: {
+      // app: gd
+      app: App
+    },
+    beforeCreate () {
+      unsubscribe()
+    },
+    methods: {
+      onF7Ready(f7) {
+        auth.onAuthStateChanged((firebaseUser) => {
+          if (firebaseUser) {
+            store.dispatch("autoSignIn", firebaseUser)
+          }
+          else {
+            f7.router.navigate('/sign-in/')
+          }
+        })
+      }
     }
-},
-  // Register App Component
-  components: {
-    // app: gd
-    app: App
-  },
-  methods: {
-    onF7Ready(f7) {
-      auth.onAuthStateChanged((firebaseUser) => {
-        if (firebaseUser) {
-          store.dispatch("autoSignIn", firebaseUser)
-        }
-        else {
-          f7.router.navigate('/sign-in/')
-        }
-      })
-    }
-  }
-});
+  })
+  unsubscribe()
+})

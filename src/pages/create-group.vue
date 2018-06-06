@@ -3,7 +3,7 @@
   <f7-page>
     <div class="page-content">
 
-      <p> <img data-src="/static/goahead.png" class="lazy lazy-fade-in picture-center"/></p>
+      <p> <img src="/static/goahead.png" class="picture-center"/> </p>
 
       <f7-list no-hairlines-md>
 
@@ -48,6 +48,7 @@
   import F7Icon from "framework7-vue/src/components/icon";
   import F7View from "framework7-vue/src/components/view";
   import {db, auth} from '../firebase'
+  import shortid from "shortid"
 
 
 
@@ -76,12 +77,14 @@
           name: '',
           active: true,
           gid: '',
+          code: ''
         },
         dbgroup: {
           members: [],
           places: [],
           start: false,
-          name: ''
+          name: '',
+          code: ''
         },
         user: {
           name: '',
@@ -99,7 +102,11 @@
     },
     methods: {
       createGroup() {
+        var shortid = require('shortid')
+        var c = shortid.generate()
         this.usergroup.name = this.tempname
+        this.usergroup.code = c
+        this.dbgroup.code = c
         this.user.name = this.$store.state.user.displayName
         this.user.uid = this.$store.state.user.uid
         this.dbgroup.members.push(this.user)
@@ -114,10 +121,12 @@
       clear() {
         this.usergroup.name = ''
         this.usergroup.gid = ''
+        this.usergroup.code = ''
         this.dbgroup.members = []
         this.dbgroup.places = []
         this.dbgroup.gid = ''
         this.dbgroup.name = ''
+        this.dbgroup.code = ''
         console.log('clear input!')
       }
     },

@@ -8,6 +8,10 @@
     </f7-tab>
 
     <f7-tab id="home" tab-active>
+
+
+      <f7-page>
+
       <f7-link @click="r()">go to j</f7-link>
       <f7-row >
         <f7-col >
@@ -28,6 +32,7 @@
           <f7-nav-title>Group List</f7-nav-title>
         </f7-navbar>
       </f7-row>
+
       <f7-block>
         <f7-searchbar
           placeholder ="Search"
@@ -46,8 +51,10 @@
           <f7-list-item title="Nothing found"></f7-list-item>
         </f7-list>
 
+        <!--<f7-page>-->
         <!-- Search through this list -->
         <f7-list class="searchbar-found" id="search-list">
+
           <!--:title="group.name"-->
           <f7-list-item  v-for="group in groups"   @swipeout:deleted="leaveGroup">
             <p @click="selectGroup(group['.key'],group.name)" >{{group.name}}</p>
@@ -57,9 +64,14 @@
             <!--</f7-swipeout-actions>-->
           </f7-list-item>
         </f7-list>
+
+        <!--</f7-page>-->
       </f7-block>
 
+      </f7-page>
+
     </f7-tab>
+
     <f7-tab id="join-group" >
       <f7-link @click="r()">go to j</f7-link>
       <join-group></join-group>
@@ -206,20 +218,20 @@ export default {components: {
   },
   firebase: function () {
     return {
+      // groups:{
+      //   source: db.ref('/groups/')
+      // },
       groups:{
-        source: db.ref('/groups/')
-      },
-      users:{
-        source: db.ref('/users/')
+        source: db.ref('/users/' + auth.currentUser.uid + '/groups')
       }
     }
   },
   methods: {
     r(){
       // console.log(this)
-      console.log(this.users);
+      console.log(this.groups);
       // this.$f7router.navigate('/j/')
-      this.updateGroupList()
+      // this.updateGroupList()
     },
     updateGroupList (){
       // const uid = this.$store.state.user.uid

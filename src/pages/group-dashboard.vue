@@ -60,8 +60,8 @@
       <f7-link icon-f7="persons_fill" text="Members" tab-link="#members" ></f7-link>
       <f7-link icon-f7="heart_fill" text="Food Places" tab-link="#places" ></f7-link>
     </f7-toolbar>
+  </f7-page>
 
-    </f7-page>
   </f7-view>
 </template>
 <script>

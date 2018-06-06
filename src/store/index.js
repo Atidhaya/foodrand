@@ -27,7 +27,7 @@ export const store = new Vuex.Store({
   },
   actions: {
     pushMe ({commit}) {
-      main.$f7.router.navigate('/sign-up/')
+      this.$f7.router.navigate('/sign-up/')
     },
     signUp ({commit}, payload) {
       console.log(payload.name)
@@ -49,7 +49,7 @@ export const store = new Vuex.Store({
           console.log(error.message)
           commit('setError', error.message)
           commit('setLoading', false)
-          main.$f7.dialog.alert(error.message)
+          this.$f7.dialog.alert(error.message)
         })
       return success
     },
@@ -64,7 +64,7 @@ export const store = new Vuex.Store({
           commit('setError', null)
           // location.reload()
           // success = true
-          main.$f7.router.navigate('/')
+          this.$f7.router.navigate('/')
         })
         .catch(error => {
           console.log('can\'t sign in')

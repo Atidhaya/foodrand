@@ -4,8 +4,7 @@
 
     <div class="page-content">
 
-      <p> <img data-src="/static/backup.png" class="lazy lazy-fade-in picture-center"/></p>
-
+      <p><img src="/static/backup.png" class="picture-center"/></p>
 
       <f7-list no-hairlines-md>
 
@@ -48,6 +47,7 @@
   import F7Icon from "framework7-vue/src/components/icon";
   import F7View from "framework7-vue/src/components/view";
   import F7Input from "framework7-vue/src/components/input";
+  import shortid from "shortid"
 
 
   export default {components: {
@@ -76,7 +76,13 @@
     },
     methods: {
       join() {
-
+        var shortid = require('shortid')
+        if (shortid.isValid(this.code)) {
+          this.$f7.dialog.alert('valid!')
+        }
+        else {
+          this.$f7.dialog.alert('invalid code group!')
+        }
       }
     },
     watch: {
