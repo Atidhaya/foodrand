@@ -4,8 +4,10 @@
 
     <f7-page>
 
-      <f7-button v-on:click="showload" >Show loader</f7-button>
+      <f7-button v-on:click="initiate" >Let's go eat!</f7-button>
 
+
+      <p id="demo-determinate-container"></p>
 
     </f7-page>
 
@@ -20,28 +22,33 @@
     import F7Preloader from "framework7-vue/src/components/preloader";
     import F7Page from "framework7-vue/src/components/page";
     import F7Button from "framework7-vue/src/components/button";
+    import F7Progressbar from "framework7-vue/src/components/progressbar";
+    import {db} from '../firebase'
+
     export default {
       name: "Initiate",
-      components: {F7Button, F7Page, F7Preloader},
+      components: {F7Progressbar, F7Button, F7Page, F7Preloader},
       props: ['gid'],
       data() {
           return {
-
+            determinateLoading: false,
+            progressBarEl: '',
+            progress: 0
           }
       },
-      mounted () {
-        // this.$f7.preloader.show()
+      beforeCreate () {
       },
       methods: {
-        showload() {
-          console.log(this.$f7.preloader)
-          this.$f7.preloader.show()
-          setTimeout(this.$f7.preloader.hide(), 3000)
+        initiate() {
+          db.ref('groups'+this.gid+'/going').set({name:auth.currentUser.displayName, uid:auth.currentUser.uid})
+          db.ref('groups'+this.gid).update({'start':true})
         }
-      },
+    },
       firebase: function () {
         return {
-
+          going: {
+            source: db.ref('groups/' + this.gid+ '/going/')
+          }
         }
       }
     }

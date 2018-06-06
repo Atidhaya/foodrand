@@ -82,9 +82,9 @@
       <sign-out></sign-out>
     </f7-tab>
 
-    <f7-tab id="initiate">
-      <initiate></initiate>
-    </f7-tab>
+    <!--<f7-tab id="initiate">-->
+      <!--<initiate></initiate>-->
+    <!--</f7-tab>-->
   </f7-tabs>
 
 
@@ -93,7 +93,7 @@
     <f7-link  icon-f7="icon-home" text="Home" tab-link="#home" tab-link-active ></f7-link>
     <f7-link icon-f7="icon-download" text="Join group" tab-link="#join-group" ></f7-link>
     <f7-link icon-f7="icon-logout" text="Signout" tab-link="#sign-out"></f7-link>
-    <f7-link icon-f7="icon-add" text="Initiate" tab-link="#initiate"></f7-link>
+    <!--<f7-link icon-f7="icon-add" text="Initiate" tab-link="#initiate"></f7-link>-->
   </f7-toolbar>
 
     <!--<f7-button @click="closePopup()">Back</f7-button>-->
