@@ -114,7 +114,7 @@
         this.dbgroup.gid = ukey
         db.ref('groups/'+ukey).set(this.dbgroup)
         this.clear()
-        this.$f7.dialog.alert('Create success! You can check your group id in home menu')
+        this.$f7.dialog.alert('Create success! You can check your group id in home menu ヾ(＾∇＾)')
       },
       clear() {
         this.usergroup.name = ''
