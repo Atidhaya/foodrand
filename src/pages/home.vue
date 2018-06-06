@@ -77,13 +77,23 @@
       <join-group></join-group>
 
     </f7-tab>
+
+    <f7-tab id="sign-out" >
+      <sign-out></sign-out>
+    </f7-tab>
+
+    <f7-tab id="initiate">
+      <initiate></initiate>
+    </f7-tab>
   </f7-tabs>
 
 
   <f7-toolbar tabbar labels>
     <f7-link icon-f7="icon-add" text="New group" tab-link="#create-group" ></f7-link>
     <f7-link  icon-f7="icon-home" text="Home" tab-link="#home" tab-link-active ></f7-link>
-    <f7-link icon-f7="icon-login" text="Join group" tab-link="#join-group" ></f7-link>
+    <f7-link icon-f7="icon-download" text="Join group" tab-link="#join-group" ></f7-link>
+    <f7-link icon-f7="icon-logout" text="Signout" tab-link="#sign-out"></f7-link>
+    <f7-link icon-f7="icon-add" text="Initiate" tab-link="#initiate"></f7-link>
   </f7-toolbar>
 
     <!--<f7-button @click="closePopup()">Back</f7-button>-->
@@ -172,10 +182,14 @@ import F7Tabs from "framework7-vue/src/components/tabs";
 import {db,auth} from '../firebase.js';
 import F7Preloader from "framework7-vue/src/components/preloader";
 import F7Popover from "framework7-vue/src/components/popover";
+import SignOut from "../authentication/sign-out";
+import Initiate from "./Initiate";
 
 
 
 export default {components: {
+    Initiate,
+    SignOut,
     F7Popover,
     F7Preloader,
     F7Tabs,

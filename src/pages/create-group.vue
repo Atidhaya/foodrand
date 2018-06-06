@@ -1,21 +1,27 @@
 <template>
   <f7-view>
-  <f7-page>
-    <div class="page-content">
+   <f7-page>
 
-      <p> <img src="/static/goahead.png" class="picture-center"/> </p>
+     <f7-list no-hairlines-md o-hairlines-ios no-hairlines-between>
 
-      <f7-list no-hairlines-md>
+      <f7-list>
 
+          <f7-list-item >
+            <p> <img src="/static/goahead.png" class="picture-center"/> </p>
 
-      <f7-list form>
+            <br/>
+
+          </f7-list-item>
+
+        </f7-list>
+
+       <f7-list no-hairlines-md o-hairlines-ios>
 
         <f7-list-item>
-          <f7-icon icon-f7="demo-list-icon" slot="media"></f7-icon>
         <f7-input :value="tempname" @input="tempname = $event.target.value"  type="text" placeholder="Group name" clear-button></f7-input>
 
-
         </f7-list-item>
+
       </f7-list>
 
     </f7-list>
@@ -23,9 +29,6 @@
     <p class="segmented">
       <f7-button :disabled=disabled v-on:click="createGroup" class="loader" >Create</f7-button>
     </p>
-
-    </div>
-
   </f7-page>
   </f7-view>
 </template>
@@ -141,9 +144,9 @@
 
 <style>
   .picture-center {
-    position: static;
+    position: absolute;
     top: 7%;
-    left: 50%;
+    left: 40%;
     transform: translate(-50%, -50%);
     display: block;
 
