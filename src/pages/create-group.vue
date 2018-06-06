@@ -110,7 +110,7 @@
         this.dbgroup.code = c
         this.me.name = this.$store.state.user.displayName
         this.me.uid = this.$store.state.user.uid
-        this.dbgroup.members.push(this.me)
+        this.dbgroup.members[this.me.uid] = this.me
         this.dbgroup.name = this.tempname
         const ukey = db.ref('users/' + this.$store.state.user.uid + '/groups/').push(this.usergroup).getKey()
         db.ref('users/' + this.$store.state.user.uid + '/groups/').child(ukey).update({'gid': ukey})

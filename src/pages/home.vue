@@ -4,13 +4,14 @@
   <f7-tabs swipeable animated>
     <f7-tab id="create-group" >
     <create-group></create-group>
-
     </f7-tab>
 
-    <f7-tab id="home" tab-active>
-
-
-      <f7-page>
+    <f7-tab id="home" tab-active >
+      <f7-page id="noPadding">
+        <!--<div v-if="infiniteLoading" >-->
+          <!--<f7-progressbar infinite color="multi"></f7-progressbar>-->
+        <!--</div>-->
+        <!--<f7-button @click="r()">Pasdasdadas</f7-button>-->
 
       <!--<f7-link @click="r()">go to j</f7-link>-->
       <f7-row >
@@ -25,6 +26,11 @@
               <div class="swiper-slide">Ad 5</div>
             </div>
           </div>
+          <!--<f7-swiper scrollbar :slidesPerView="auto" :loopedSlides=3 :loop="true">-->
+            <!--<f7-swiper-slide >Ad 1</f7-swiper-slide>-->
+            <!--<f7-swiper-slide >Ad 2</f7-swiper-slide>-->
+            <!--<f7-swiper-slide>Ad 3</f7-swiper-slide>-->
+          <!--</f7-swiper>-->
         </f7-col>
       </f7-row>
       <f7-row >
@@ -178,10 +184,18 @@ import F7Preloader from "framework7-vue/src/components/preloader";
 import F7Popover from "framework7-vue/src/components/popover";
 import SignOut from "../authentication/sign-out";
 import Initiate from "./Initiate";
+import {Dom7} from "framework7";
+import * as Framework7 from "framework7";
+import F7Progressbar from "framework7-vue/src/components/progressbar";
+import F7Swiper from "framework7-vue/src/components/swiper";
+import F7SwiperSlide from "framework7-vue/src/components/swiper-slide";
 
 
 
 export default {components: {
+    F7SwiperSlide,
+    F7Swiper,
+    F7Progressbar,
     Initiate,
     SignOut,
     F7Popover,
@@ -224,7 +238,8 @@ export default {components: {
       user: auth.currentUser,
       vlData: {},
       // groups: [],
-      reload: true
+      reload: true,
+      infiniteLoading: true,
     }
   },
   // mounted () {
@@ -267,10 +282,18 @@ export default {components: {
   // },
   methods: {
     r(){
+      if(this.infiniteLoading){
+        this.infiniteLoading =false
+      }else{
+        this.infiniteLoading = true
+      }
+      Framework7
       // console.log(this)
+      console.log(this.infiniteLoading)
       console.log(this.groups);
       console.log(this.users);
       console.log(this.groupList);
+
       // console.log("Members in group ",this.groups[gid].members)
       // this.$f7router.navigate('/j/')
       // this.updateGroupList()
@@ -400,7 +423,13 @@ export default {components: {
   .statusbar {
     background: pink;
   }
-  .nopadding {
-    padding: 0;
+  .noPadding {
+    padding: 0 0 0 0;
+  }
+  .noPadding:after{
+    content: '';
+    height: 48px; /* required padding bottom */
+    display: block;
+    width: 1px;
   }
 </style>
