@@ -95,7 +95,6 @@
   import F7View from "framework7-vue/src/components/view";
   import F7Tabs from "framework7-vue/src/components/tabs";
   import {db} from '../firebase.js';
-  // import {Framework7,Framework7Vue} from "../main";
 
 
   export default {components: {
@@ -124,10 +123,6 @@
     data () {
       return {
         alertMessage:'',
-        // targetUserName: '',
-        // targetUser: '',
-        // targetFood: '',
-        // targetFoodId: '',
         targetId:'',
         targetName: '',
         popoverOpenFood: false,
@@ -140,19 +135,7 @@
         code:'',
       }
     },
-    // beforeUpdate() {
-    // console.log('update')
-    //   for (var i =0; i < this.groups.length; i++){
-    //     console.log(this.groups[i]['.key'])
-    //     if(this.groups[i]['.key'] === this.gid){
-    //       console.log('found group ',this.groups[i]['.key'])
-    //       //Found the group
-    //       this.members = this.groups[i].members
-    //       this.places = this.groups[i].places
-    //       break
-    //     }
-    //   }
-    // },
+
     firebase: function () {
       return {
         groups:{
@@ -164,6 +147,9 @@
         // places: {
         //   source: db.ref('/groups/'+this.gid+'/places/')
         // },
+        users:{
+          source: db.ref('/users/')
+        },
         all: {
           source: db.ref('/')
         }
@@ -202,11 +188,48 @@
         this.$firebaseRefs.groups.child(this.gid).child('places').child(key).update({key: key})
         this.updatePlacesAndMembers()
       },
-      deleteMember (){
-        console.log("Delete Member ... ",this.targetName, this.targetId, ' in ' , this.gid)
-        this.$firebaseRefs.groups.child(this.gid).child('members').child(this.targetId).remove()
+      // deleteMember (){
+      //   console.log("Delete Member ... ",this.targetName, this.targetId, ' in ' , this.gid)
+      //   this.$firebaseRefs.groups.child(this.gid).child('members').child(this.targetId).remove()
+      //   //Access that member group list and set flag group
+      //   this.$firebaseRefs.all.child('users').child(this.targetId).child('groups').child(this.gid).child('active').set(false)
+      //   this.updatePlacesAndMembers()
+      //   this.closePopoverUser()
+      // },
+      findIndexUsingKey (list, key){
+        for(let i = 0; i<list.length; i++){
+          // console.log(list[i],key)
+          if(list[i]['.key'] === key){
+            return i
+          }
+        }
+        return -1
+      } ,
+      findIndexUsingUid (list, targetUid){
+        console.log('TargetList: ',list)
+        for(let i = 0; i<list.length; i++){
+          console.log(list[i],targetUid)
+          if(list[i].uid === targetUid){
+            return i
+          }
+        }
+        return -1
+      },
+      deleteMember( ){
+        const uid = this.targetId
+        const groupIndex = this.findIndexUsingKey(this.groups, this.gid)
+        const userIndex = this.findIndexUsingUid(this.groups[groupIndex].members,uid)
+
+        if(this.groups[groupIndex].members.length === 1){
+          console.log("Last user !! Delete the group")
+          this.$firebaseRefs.groups.child(this.gid).remove()
+        }else{
+          this.$firebaseRefs.groups.child(this.gid +'/members/' + userIndex).remove()
+        }
+        console.log("Delete Member ... ", uid ,' in ' , this.gid)
         //Access that member group list and set flag group
-        this.$firebaseRefs.all.child('users').child(this.targetId).child('groups').child(this.gid).child('active').set(false)
+        this.$firebaseRefs.users.child(userIndex).child('groups').child(this.gid).remove()
+        console.log('Leave',this.gid)
         this.updatePlacesAndMembers()
         this.closePopoverUser()
       },
@@ -258,24 +281,6 @@
       closePopoverUser (){
         this.popoverOpenUser = false
       },
-      // openPopoverUser (name,uid){
-      //   this.targetUser = uid
-      //   this.targetUserName = name
-      //   this.popoverOpenUser = true
-      //   console.log("Target ",this.targetUser)
-      // },
-      // deleteFood () {
-      //   const id = this.targetId
-      //   console.log('DELETE FOOD',id)
-      //   // toast()
-      //   this.closePopoverFood()
-      // },
-      // deleteMember(){
-      //   const uid = this.targetId
-      //   console.log('DELETE USER',uid)
-      //
-      //   this.closePopoverUser()
-      // },
       searchList (query, items) {
         var found = [];
         for (var i = 0; i < items.length; i += 1) {
