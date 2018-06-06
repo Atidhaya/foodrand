@@ -104,9 +104,6 @@
         if (shortid.isValid(this.code)) {
           for (let i = 0; i < this.allgroups.length; i++) {
             if (this.allgroups[i].code === this.code) {
-              // console.log(this.mygroups)
-              // console.log(this.mygroups[0])
-              // console.log(this.mygroups[0].code)
               if (this.mygroups.some(c => c.code === this.code)) {
                 this.$f7.dialog.alert('You\'re already in this group (✖╭╮✖) ')
               }
@@ -118,7 +115,7 @@
                 }).then(() => {
                   // console.log(this.$store.state.user.displayName)
                   const user = {name: auth.currentUser.displayName, uid: auth.currentUser.uid}
-                  temp[auth.currentUser.uid] = this.me
+                  temp[auth.currentUser.uid] = user
                   console.log('add members:', temp)
                   db.ref('groups/' + this.allgroups[i]['.key']).child('members').set(temp)
                   db.ref('users/' + auth.currentUser.uid + '/groups/' + this.allgroups[i]['.key']).set({
