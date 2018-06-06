@@ -86,7 +86,7 @@
           name: '',
           code: ''
         },
-        user: {
+        me: {
           name: '',
           uid: ''
         },
@@ -107,14 +107,14 @@
         this.usergroup.name = this.tempname
         this.usergroup.code = c
         this.dbgroup.code = c
-        this.user.name = this.$store.state.user.displayName
-        this.user.uid = this.$store.state.user.uid
-        this.dbgroup.members.push(this.user)
+        this.me.name = this.$store.state.user.displayName
+        this.me.uid = this.$store.state.user.uid
+        this.dbgroup.members.push(this.me)
         this.dbgroup.name = this.tempname
         const ukey = db.ref('users/' + this.$store.state.user.uid + '/groups/').push(this.usergroup).getKey()
         db.ref('users/' + this.$store.state.user.uid + '/groups/').child(ukey).update({'gid': ukey})
         this.dbgroup.gid = ukey
-        db.ref('groups/' + ukey).set(this.dbgroup)
+        db.ref('groups/'+ukey).set(this.dbgroup)
         this.clear()
         this.$f7.dialog.alert('Create success! You can check your group id in home menu')
       },

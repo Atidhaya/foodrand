@@ -72,7 +72,7 @@
     data () {
       return {
         code: '',
-        disabled: true
+        disabled: true,
       }
     },
     firebase: function () {
@@ -84,11 +84,21 @@
     },
     methods: {
       join() {
+        var temp = []
         var shortid = require('shortid')
         if (shortid.isValid(this.code)) {
           for (let i = 0; i < this.allgroups.length; i++) {
             if (this.allgroups[i].code === this.code) {
-              console.log('find')
+              db.ref('groups/' + this.allgroups[i]['.key']).once('value').then(function (snapshot) {
+                console.log(snapshot.val().members)
+                temp = snapshot.val().members
+              }).then( () => {
+                console.log(this.$store.state.user.displayName)
+                const user = {name: auth.currentUser.displayName, uid: auth.currentUser.uid}
+                console.log(user)
+                temp.push(user)
+                // db.ref('groups/' + key + '/members').set(temp)
+              })
             }
           }
           this.$f7.dialog.alert('valid!')
