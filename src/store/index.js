@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-// import main from '../main'
+
 
 
 import {auth, db} from '../firebase'
@@ -62,6 +62,7 @@ export const store = new Vuex.Store({
     },
     signIn ({commit}, payload) {
       // main.$f7.router.navigate('/sign-up/')
+      console.log(this.$f7router)
       commit('setLoading', true)
       var success = false
       auth.signInWithEmailAndPassword(payload.email, payload.password)
@@ -69,8 +70,7 @@ export const store = new Vuex.Store({
           commit('setUser', {email: firebaseUser.email})
           commit('setLoading', false)
           commit('setError', null)
-          console.log(auth.currentUser.displayName)
-          this.$f7.router.navigate('/')
+          this.$f7router.navigate('/')
         })
         .catch(error => {
           console.log('can\'t sign in')

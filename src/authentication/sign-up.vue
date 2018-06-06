@@ -86,6 +86,7 @@
   import F7Link from "framework7-vue/src/components/link";
   import F7Tab from "framework7-vue/src/components/tab";
   import JoinGroup from "../pages/join-group";
+  import {auth, db} from "../firebase"
 
   export default {
     components: {JoinGroup, F7Tab, F7Link, F7Input, F7Label, F7ListItem, F7Button, F7List, F7Navbar, F7Page, F7View},
@@ -129,7 +130,27 @@
           this.$f7.dialog.alert('Please enter your email')
         }
         else {
-          this.$store.dispatch('signUp', {email: this.email, name: this.name, password: this.password})
+          this.$store.dispatch('setLoading', true)
+          auth.createUserWithEmailAndPassword(this.email, this.password)
+            .then(firebaseUser => {
+              console.log('In sign up.............')
+              auth.currentUser.updateProfile({ displayName: payload.name }).then( () => {
+                this.$store.dispatch('setUser', {email: this.email})
+                console.log('name:' ,payload.name)
+                console.log(auth.currentUser.displayName)
+                db.ref('users/' + auth.currentUser.uid).set({ email: payload.email, name: payload.name })
+                this.$store.dispatch('setLoading', false)
+                location.reload()
+              })
+              // main.$f7.router.navigate('/sign-in/')
+            })
+            .catch(error => {
+              console.log('can\'t sign up')
+              console.log(error.message)
+              this.$store.dispatch('setError', error.message)
+              this.$store.dispatch('setLoading', false)
+              this.$f7.dialog.alert(error.message)
+            })
         }
       },
       r() {

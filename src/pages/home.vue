@@ -12,7 +12,7 @@
 
       <f7-page>
 
-      <f7-link @click="r()">go to j</f7-link>
+      <!--<f7-link @click="r()">go to j</f7-link>-->
       <f7-row >
         <f7-col >
           <div class="swiper-container swiper-init demo-swiper" data-pagination='{"el": ".swiper-pagination"}'>
@@ -68,7 +68,7 @@
     </f7-tab>
 
     <f7-tab id="join-group" >
-
+      <!--<f7-link @click="r()">go to j</f7-link>-->
       <join-group></join-group>
 
     </f7-tab>
@@ -212,7 +212,8 @@ export default {components: {
       groupTarget: '',
       user: auth.currentUser,
       vlData: {},
-      groups: []
+      // groups: [],
+      reload: true
     }
   },
   // mounted () {
@@ -273,17 +274,43 @@ export default {components: {
           this.groupList = userInfo.groups
         }
    },
+    findIndexUsingKey (list, key){
+      for(let i = 0; i<list.length; i++){
+        // console.log(list[i],key)
+        if(list[i]['.key'] === key){
+          return i
+        }
+      }
+      return -1
+    } ,
+    findIndexUsingUid (list, targetUid){
+      console.log('TargetList: ',list)
+      for(let i = 0; i<list.length; i++){
+        console.log(list[i],targetUid)
+        if(list[i].uid === targetUid){
+          return i
+        }
+      }
+      return -1
+    },
     leaveGroup( gid ){
       const uid = this.$store.state.user.uid
-      // Delete member from the group
-      console.log(this.groups[gid].members)
-      // this.$firebaseRefs.groups.child(gid).child('members').child(uid).remove()
+      const groupIndex = this.findIndexUsingKey(this.groups, gid)
+      const userIndex = this.findIndexUsingUid(this.groups[groupIndex].members,uid)
+
+      if(this.groups[groupIndex].members.length === 1){
+        console.log("Last user !! Delete the group")
+        this.$firebaseRefs.groups.child(gid).remove()
+      }else{
+        this.$firebaseRefs.groups.child(gid +'/members/' + userIndex).remove()
+      }
       console.log("Delete Member ... ", uid ,' in ' , gid)
+
       //Access that member group list and set flag group
-      console.log(this.userGroups)
-      // this.$firebaseRefs.userGroups.child(gid).remove()
+      // console.log('UserGroup',this.userGroups)
+      this.$firebaseRefs.userGroups.child(gid).remove()
       console.log('Leave',gid)
-      // this.updatePlacesAndMembers()
+      this.updateGroupList()
     },
     selectGroup( id, name ){
       console.log('SELECT',id,name)
@@ -309,22 +336,14 @@ export default {components: {
       console.log("Groups Watch")
       this.updateGroupList()
     },
-    groupList() {
-      const uid = this.$store.state.user.uid
-      // const uid = "bsbbteLSIMOg4vhIuZa1m91LZRe2"
-      const userInfo = this.users.filter(user => user['.key'] === uid)[0]
-      //If user is in a group
-      console.log(userInfo.groups)
-      if(userInfo.groups !== undefined){
-        this.groupList = userInfo.groups
-      }
-    }
+
   },
-  // computed: {
-  //   groupList () {
-  //     this.updateGroupList()
-  //   }
+  created() {
+  // if(reload){
+  //   location.reload()
   // }
+  //   console.log(this.$store.state.user)
+  }
 }
 </script>
 

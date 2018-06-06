@@ -141,7 +141,7 @@
 
 <style>
   .picture-center {
-    position: absolute;
+    position: static;
     top: 7%;
     left: 50%;
     transform: translate(-50%, -50%);

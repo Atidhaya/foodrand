@@ -162,7 +162,7 @@
         //   source: db.ref('/groups/'+this.gid)
         // },
         // places: {
-        //   source: db.ref('/groups/')
+        //   source: db.ref('/groups/'+this.gid+'/places/')
         // },
         all: {
           source: db.ref('/')
@@ -298,6 +298,9 @@
         console.log('watch')
         this.updatePlacesAndMembers()
       },
+      groups() {
+        this.updatePlacesAndMembers()
+      }
 
     }
   }
