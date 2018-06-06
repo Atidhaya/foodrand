@@ -101,6 +101,7 @@
       <f7-button @click="closePopup()">Back</f7-button>
       <group-dashboard :gid= groupTarget  @closePopup="closePopup"  ></group-dashboard>
     </f7-popup>
+    
 
   </f7-page>
 
