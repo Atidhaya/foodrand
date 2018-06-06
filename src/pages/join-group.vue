@@ -48,6 +48,7 @@
   import F7View from "framework7-vue/src/components/view";
   import F7Input from "framework7-vue/src/components/input";
   import shortid from "shortid"
+  import {auth, db} from '../firebase'
 
 
   export default {components: {
@@ -74,10 +75,22 @@
         disabled: true
       }
     },
+    firebase: function () {
+      return {
+        allgroups: {
+          source: db.ref('groups/')
+        }
+      }
+    },
     methods: {
       join() {
         var shortid = require('shortid')
         if (shortid.isValid(this.code)) {
+          for (let i = 0; i < this.allgroups.length; i++) {
+            if (this.allgroups[i].code === this.code) {
+              console.log('find')
+            }
+          }
           this.$f7.dialog.alert('valid!')
         }
         else {

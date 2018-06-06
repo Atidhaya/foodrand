@@ -83,3 +83,5 @@ const unsubscribe = auth.onAuthStateChanged((firebaseUser) => {
   })
   unsubscribe()
 })
+
+// export default main

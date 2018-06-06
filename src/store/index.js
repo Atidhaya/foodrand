@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import main from '../main'
+// import main from '../main'
 
 
 import {auth, db} from '../firebase'
@@ -27,7 +27,9 @@ export const store = new Vuex.Store({
   },
   actions: {
     pushMe ({commit}) {
-      this.$f7.router.navigate('/sign-up/')
+      // console.log(unsubscribe)
+      console.log(this)
+      // main.unsubscribe.$f7.router.navigate('/sign-up/')
     },
     signUp ({commit}, payload) {
       console.log(payload.name)

@@ -96,7 +96,7 @@
     firebase: function () {
       return {
         user: {
-          source: db.ref('users/' + this.$store.state.user.uid)
+          source: db.ref('users/' + auth.currentUser.uid)
         }
       }
     },

@@ -214,6 +214,7 @@ export default {components: {
       popupOpen: false,
       groupTarget: '',
       vlData: {},
+      groups: []
     }
   },
   firebase: function () {
