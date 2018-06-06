@@ -78,6 +78,10 @@
       return {
         code: '',
         disabled: true,
+        me: {
+          name: '',
+          uid: ''
+        }
       }
     },
     firebase: function () {
@@ -92,6 +96,8 @@
     },
     methods: {
       join() {
+        this.me.name = auth.currentUser.displayName
+        this.me.uid = auth.currentUser.uid
         var temp = []
         let gname = ''
         var shortid = require('shortid')
@@ -110,12 +116,12 @@
                   gname = snapshot.val().name
                   console.log('before add:', temp)
                 }).then(() => {
-                  console.log(this.$store.state.user.displayName)
+                  // console.log(this.$store.state.user.displayName)
                   const user = {name: auth.currentUser.displayName, uid: auth.currentUser.uid}
-                  temp.push(user)
+                  temp[auth.currentUser.uid] = this.me
                   console.log('add members:', temp)
                   db.ref('groups/' + this.allgroups[i]['.key']).child('members').set(temp)
-                  db.ref('users/' + this.$store.state.user.uid + '/groups/' + this.allgroups[i]['.key']).set({
+                  db.ref('users/' + auth.currentUser.uid + '/groups/' + this.allgroups[i]['.key']).set({
                     'name': gname,
                     'active': true,
                     'gid': this.allgroups[i]['.key'],

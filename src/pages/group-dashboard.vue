@@ -66,6 +66,7 @@
       </f7-popover>
 
     <f7-popup :opened= popupStart >
+      <f7-button @click="closePopup()">Back</f7-button>
       <initiate :gid= this.gid ></initiate>
     </f7-popup>
 
@@ -73,6 +74,7 @@
       <f7-link icon-f7="persons_fill" text="Members" tab-link="#members" ></f7-link>
       <f7-link icon-f7="heart_fill" text="Food Places" tab-link="#places" ></f7-link>
     </f7-toolbar>
+
   </f7-page>
 
   </f7-view>
@@ -100,7 +102,7 @@
   import F7Tabs from "framework7-vue/src/components/tabs";
   import {db} from '../firebase.js';
   import F7Popup from "framework7-vue/src/components/popup";
-  import Initiate from "./Initiate"
+  import Initiate from "./Initiate";
 
 
   export default {components: {
@@ -248,7 +250,7 @@
       },
       updatePlacesAndMembers (){
         for (var i =0; i < this.groups.length; i++){
-          console.log(this.groups[i]['.key'])
+          // console.log(this.groups[i]['.key'])
           if(this.groups[i]['.key'] === this.gid){
             console.log('found group ',this.groups[i]['.key'])
             this.code = this.groups[i].code
@@ -272,6 +274,7 @@
       openAddPlaces (){
         this.addPlacePopover = true
       },
+
       closeAddPlaces (){
         this.addPlacePopover = false
       },
@@ -288,8 +291,11 @@
 
         console.log("Target ",this.targetName)
       },
+      closePopup() {
+        this.popupStart = false
+      },
       closePopoverFood() {
-        this.popoverOpenFood =false
+        this.popoverOpenFood = false
       },
       closePopoverUser (){
         this.popoverOpenUser = false

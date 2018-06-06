@@ -26,6 +26,15 @@ export const store = new Vuex.Store({
     },
   },
   actions: {
+    setUser ({commit}, payload) {
+      commit('setUser', payload)
+    },
+    setLoading ({commit}, payload){
+      commit('setLoading', payload)
+    },
+    setError ({commit}, payload) {
+      commit('setError', payload)
+    },
     pushMe ({commit}) {
       // console.log(unsubscribe)
       console.log(this)
