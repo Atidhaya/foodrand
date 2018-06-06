@@ -31,6 +31,7 @@
   import F7Input from "framework7-vue/src/components/input";
   import F7ListButton from "framework7-vue/src/components/list-button";
   import F7BlockFooter from "framework7-vue/src/components/block-footer";
+  import {auth} from '../firebase'
 
   export default {
     components: {
@@ -44,7 +45,21 @@
     },
     methods: {
       login () {
-        this.$store.dispatch('signIn', {email: this.email, password: this.password})
+        // this.$store.dispatch('signIn', {email: this.email, password: this.password})
+        auth.signInWithEmailAndPassword(this.email, this.password)
+          .then(firebaseUser => {
+            this.$store.dispatch('setUser', {email: this.email})
+            this.$store.dispatch('setLoading', false)
+            this.$store.dispatch('setError', null)
+            this.$f7router.navigate('/')
+            location.reload()
+          })
+          .catch(error => {
+            console.log('can\'t sign in')
+            console.log(error.message)
+            this.$store.dispatch('setError', error.message)
+            this.$store.dispatch('setLoading', false)
+          })
       }
     }
   }

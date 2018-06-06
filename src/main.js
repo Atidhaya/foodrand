@@ -40,8 +40,8 @@ Vue.use(VueFire)
 
 // Init App
 
-const unsubscribe = auth.onAuthStateChanged((firebaseUser) => {
-  new Vue({
+export const unsubscribe = auth.onAuthStateChanged((firebaseUser) => {
+  const vue = new Vue({
     el: '#app',
     template: '<app/>',
     store,
@@ -82,6 +82,7 @@ const unsubscribe = auth.onAuthStateChanged((firebaseUser) => {
     }
   })
   unsubscribe()
+  return vue
 })
 
 // export default main
