@@ -34,7 +34,7 @@
       </f7-row>
 
       <f7-block>
-        <f7-searchbar
+      <f7-searchbar
           placeholder ="Search"
           search-container="#search-list"
           search-item="li"
@@ -53,23 +53,18 @@
 
         <!--<f7-page>-->
         <!-- Search through this list -->
-        <f7-list class="searchbar-found" id="search-list">
-
           <!--:title="group.name"-->
-          <f7-list-item  v-for="group in groups"   @swipeout:deleted="leaveGroup">
+        <f7-list class="searchbar-found" id="search-list">
+          <f7-list-item   v-for="group in userGroups"   @swipeout:deleted="leaveGroup">
+
             <p @click="selectGroup(group['.key'],group.name)" >{{group.name}}</p>
             <f7-button @click="leaveGroup(group['.key'])">Leave</f7-button>
-            <!--<f7-swipeout-actions>-->
-              <!--<f7-swipeout-button delete>Delete</f7-swipeout-button>-->
-            <!--</f7-swipeout-actions>-->
+
           </f7-list-item>
         </f7-list>
 
-        <!--</f7-page>-->
       </f7-block>
-
       </f7-page>
-
     </f7-tab>
 
     <f7-tab id="join-group" >
@@ -104,7 +99,6 @@
     
 
   </f7-page>
-
   <!--<f7-page>-->
     <!--<f7-navbar>-->
       <!--<f7-nav-left>-->
@@ -228,66 +222,107 @@ export default {components: {
       loading: true,
       popupOpen: false,
       groupTarget: '',
+      user: auth.currentUser,
       vlData: {},
-      groups: [],
+      // groups: [],
       reload: true
     }
   },
+  // mounted () {
+  //   var temp = []
+  //   db.ref('users/'+this.$store.state.user.uid).once('value').then(function(snapshot) {
+  //     temp = snapshot.val().groups
+  //     console.log("mounted", temp)
+  //     this.groupList = temp
+  //   })
+  // },
   firebase: function () {
+  this.$store.dispatch('getUser')
+    console.log('dispatched user')
     return {
-      // groups:{
-      //   source: db.ref('/groups/')
-      // },
       groups:{
-        source: db.ref('/users/' + auth.currentUser.uid + '/groups')
+        source: db.ref('/groups/')
+      },
+      userGroups:{
+        source: db.ref('/users/'+auth.currentUser.uid+'/groups')
+      },
+      // groupList:{
+      //   source: db.ref('/users/'+this.$store.state.user.uid+'/groups/')
+      // },
+      users:{
+        source: db.ref('/users/')
       }
     }
   },
+  // beforeUpdate(){
+  //
+  //   const uid = this.$store.state.user.uid
+  //   // const uid = "bsbbteLSIMOg4vhIuZa1m91LZRe2"
+  //   const userInfo = this.users.filter(user => user['.key'] === uid)[0]
+  //   //If user is in a group
+  //   console.log(userInfo.groups)
+  //   if(userInfo.groups !== undefined){
+  //     this.groupList = userInfo.groups
+  //   }
+  //
+  // },
   methods: {
     r(){
       // console.log(this)
       console.log(this.groups);
+      console.log(this.users);
+      console.log(this.groupList);
+      // console.log("Members in group ",this.groups[gid].members)
       // this.$f7router.navigate('/j/')
       // this.updateGroupList()
     },
     updateGroupList (){
-      // const uid = this.$store.state.user.uid
-      // const uid ="6oJhVsJRpmgY4yFMQthMs9JzZXj1"
-      let temp =[]
-      const uid = "bsbbteLSIMOg4vhIuZa1m91LZRe2"
+      const uid = this.$store.state.user.uid
+      // const uid = "bsbbteLSIMOg4vhIuZa1m91LZRe2"
       const userInfo = this.users.filter(user => user['.key'] === uid)[0]
-      // if(userInfo.)
       //If user is in a group
       console.log(userInfo.groups)
       if(userInfo.groups !== undefined){
-        console.log(userInfo.groups)
-        // let iter = userInfo.groups.values()
-        for (let userGroup in userInfo.groups) {
-          // const groupKey = userGroup['.key']
-          console.log(groups[groupKey])
+          this.groupList = userInfo.groups
         }
-        // for(let i = 0; i<userInfo.groups.length; i++){
-        //   const groupKey = userInfo.groups[i]['.key']
-        //   console.log(groups[groupKey])
-        //   // temp.push(groups[groupKey])
-        // }
-
-        // temp = this.groups.filter(group =>
-        //   userInfo.groups.some(userGroup =>
-        //     userGroup['.key'] === group['.key']))
+   },
+    findIndexUsingKey (list, key){
+      for(let i = 0; i<list.length; i++){
+        // console.log(list[i],key)
+        if(list[i]['.key'] === key){
+          return i
+        }
       }
-      // let temp = this.
-
-      // this.groupList = temp
+      return -1
+    } ,
+    findIndexUsingUid (list, targetUid){
+      console.log('TargetList: ',list)
+      for(let i = 0; i<list.length; i++){
+        console.log(list[i],targetUid)
+        if(list[i].uid === targetUid){
+          return i
+        }
+      }
+      return -1
     },
     leaveGroup( gid ){
       const uid = this.$store.state.user.uid
-      this.$firebaseRefs.groups.child(gid).child('members').child(uid).remove()
+      const groupIndex = this.findIndexUsingKey(this.groups, gid)
+      const userIndex = this.findIndexUsingUid(this.groups[groupIndex].members,uid)
+
+      if(this.groups[groupIndex].members.length === 1){
+        console.log("Last user !! Delete the group")
+        this.$firebaseRefs.groups.child(gid).remove()
+      }else{
+        this.$firebaseRefs.groups.child(gid +'/members/' + userIndex).remove()
+      }
       console.log("Delete Member ... ", uid ,' in ' , gid)
+
       //Access that member group list and set flag group
-      this.$firebaseRefs.all.child('users').child(uid).child('groups').child(gid).remove()
+      // console.log('UserGroup',this.userGroups)
+      this.$firebaseRefs.userGroups.child(gid).remove()
       console.log('Leave',gid)
-      // this.updatePlacesAndMembers()
+      this.updateGroupList()
     },
     selectGroup( id, name ){
       console.log('SELECT',id,name)
@@ -310,7 +345,10 @@ export default {components: {
   },
   watch: {
     groups() {
-    }
+      console.log("Groups Watch")
+      this.updateGroupList()
+    },
+
   },
   created() {
   // if(reload){

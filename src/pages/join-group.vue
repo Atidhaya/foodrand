@@ -26,7 +26,6 @@
         </f7-list>
 
       </f7-list>
-
       <p class="segmented">
         <f7-button :disabled=disabled v-on:click="join" class="loader" >Join group!</f7-button>
       </p>
@@ -53,9 +52,11 @@
   import F7Input from "framework7-vue/src/components/input";
   import shortid from "shortid"
   import {auth, db} from '../firebase'
+  import F7Button from "framework7-vue/src/components/button";
 
 
   export default {components: {
+      F7Button,
       F7Input,
       F7View,
       F7Icon,
@@ -109,12 +110,12 @@
                   gname = snapshot.val().name
                   console.log('before add:', temp)
                 }).then(() => {
-                  console.log(this.$store.state.user.displayName)
+                  // console.log(this.$store.state.user.displayName)
                   const user = {name: auth.currentUser.displayName, uid: auth.currentUser.uid}
                   temp.push(user)
                   console.log('add members:', temp)
                   db.ref('groups/' + this.allgroups[i]['.key']).child('members').set(temp)
-                  db.ref('users/' + this.$store.state.user.uid + '/groups/' + this.allgroups[i]['.key']).set({
+                  db.ref('users/' + auth.currentUser.uid + '/groups/' + this.allgroups[i]['.key']).set({
                     'name': gname,
                     'active': true,
                     'gid': this.allgroups[i]['.key'],

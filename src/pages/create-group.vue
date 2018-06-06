@@ -108,12 +108,12 @@
         this.usergroup.name = this.tempname
         this.usergroup.code = c
         this.dbgroup.code = c
-        this.me.name = this.$store.state.user.displayName
-        this.me.uid = this.$store.state.user.uid
+        this.me.name = auth.currentUser.displayName
+        this.me.uid = auth.currentUser.uid
         this.dbgroup.members.push(this.me)
         this.dbgroup.name = this.tempname
-        const ukey = db.ref('users/' + this.$store.state.user.uid + '/groups/').push(this.usergroup).getKey()
-        db.ref('users/' + this.$store.state.user.uid + '/groups/').child(ukey).update({'gid': ukey})
+        const ukey = db.ref('users/' + auth.currentUser.uid + '/groups/').push(this.usergroup).getKey()
+        db.ref('users/' + auth.currentUser.uid + '/groups/').child(ukey).update({'gid': ukey})
         this.dbgroup.gid = ukey
         db.ref('groups/'+ukey).set(this.dbgroup)
         this.clear()

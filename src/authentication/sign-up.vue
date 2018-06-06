@@ -134,11 +134,11 @@
           auth.createUserWithEmailAndPassword(this.email, this.password)
             .then(firebaseUser => {
               console.log('In sign up.............')
-              auth.currentUser.updateProfile({ displayName: payload.name }).then( () => {
+              auth.currentUser.updateProfile({ displayName: this.name }).then( () => {
                 this.$store.dispatch('setUser', {email: this.email})
-                console.log('name:' ,payload.name)
+                console.log('name:' , this.name)
                 console.log(auth.currentUser.displayName)
-                db.ref('users/' + auth.currentUser.uid).set({ email: payload.email, name: payload.name })
+                db.ref('users/' + auth.currentUser.uid).set({ email: this.email, name: this.name })
                 this.$store.dispatch('setLoading', false)
                 location.reload()
               })

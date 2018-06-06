@@ -26,10 +26,22 @@ export const store = new Vuex.Store({
     },
   },
   actions: {
+    setUser ({commit}, payload) {
+      commit('setUser', payload)
+    },
+    setLoading ({commit}, payload){
+      commit('setLoading', payload)
+    },
+    setError ({commit}, payload) {
+      commit('setError', payload)
+    },
     pushMe ({commit}) {
       // console.log(unsubscribe)
       console.log(this)
       // main.unsubscribe.$f7.router.navigate('/sign-up/')
+    },
+    getUser ({commit}) {
+      console.log('user from store', this.user);
     },
     signUp ({commit}, payload) {
       console.log(payload.name)

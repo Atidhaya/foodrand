@@ -42,6 +42,7 @@
           }
       },
       beforeCreate () {
+        console.log("GID in Rand ",this.gid)
       },
       methods: {
         initiate() {
@@ -49,7 +50,7 @@
           db.ref('groups'+this.gid).update({'start':true})
         },
         randomize() {
-
+          console.log("GID in Rand ",this.gid)
         }
     },
       firebase: function () {
