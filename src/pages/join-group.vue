@@ -90,18 +90,19 @@
           for (let i = 0; i < this.allgroups.length; i++) {
             if (this.allgroups[i].code === this.code) {
               db.ref('groups/' + this.allgroups[i]['.key']).once('value').then(function (snapshot) {
-                console.log(snapshot.val().members)
                 temp = snapshot.val().members
+                console.log('before add:',temp)
               }).then( () => {
                 console.log(this.$store.state.user.displayName)
                 const user = {name: auth.currentUser.displayName, uid: auth.currentUser.uid}
-                console.log(user)
                 temp.push(user)
+                console.log('add members:', temp)
+                db.ref('groups/' + this.allgroups[i]['.key']).child('members').set(temp)
                 // db.ref('groups/' + key + '/members').set(temp)
+                this.$f7.dialog.alert('join success!')
               })
             }
           }
-          this.$f7.dialog.alert('valid!')
         }
         else {
           this.$f7.dialog.alert('invalid code group!')
