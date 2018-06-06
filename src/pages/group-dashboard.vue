@@ -24,7 +24,7 @@
               <br/>
             <f7-block >
             <p class="gid" >:Access Code:</p><br/>
-            <h1 class="gid" >{{this.groups[0].code}}</h1><br/>
+            <h1 class="gid" >{{this.code}}</h1><br/>
             </f7-block>
               <p></p>
               <br/>
@@ -69,8 +69,8 @@
       <f7-link icon-f7="persons_fill" text="Members" tab-link="#members" ></f7-link>
       <f7-link icon-f7="heart_fill" text="Food Places" tab-link="#places" ></f7-link>
     </f7-toolbar>
+  </f7-page>
 
-    </f7-page>
   </f7-view>
 </template>
 <script>
@@ -137,6 +137,7 @@
         groups: [],
         places: {},
         vlData: {},
+        code:'',
       }
     },
     // beforeUpdate() {
@@ -157,8 +158,8 @@
         groups:{
           source: db.ref('/groups/')
         },
-        // members: {
-        //   source: db.ref('/groups/'+this.gid+'/members')
+        // groupInfo: {
+        //   source: db.ref('/groups/'+this.gid)
         // },
         // places: {
         //   source: db.ref('/groups/')
@@ -173,8 +174,8 @@
         console.log(this.popoverOpen)
         console.log('Gid: ',this.gid.toString())
         console.log('Groups ',this.groups)
+        console.log('GroupsInfo ',this.groupInfo)
         console.log('Members ',this.members)
-        console.log('Members ',this.members.length)
         console.log('Places ',this.places)
         console.log('all ',this.all)
         console.log('placesList ',this.placesList )
@@ -214,6 +215,7 @@
           console.log(this.groups[i]['.key'])
           if(this.groups[i]['.key'] === this.gid){
             console.log('found group ',this.groups[i]['.key'])
+            this.code = this.groups[i].code
             //Found the group
             this.members = this.groups[i].members
             this.places = this.groups[i].places

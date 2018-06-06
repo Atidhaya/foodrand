@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import main from '../main'
+// import main from '../main'
 
 
 import {auth, db} from '../firebase'
@@ -27,7 +27,9 @@ export const store = new Vuex.Store({
   },
   actions: {
     pushMe ({commit}) {
-      main.$f7.router.navigate('/sign-up/')
+      // console.log(unsubscribe)
+      console.log(this)
+      // main.unsubscribe.$f7.router.navigate('/sign-up/')
     },
     getUser ({commit}) {
       console.log('user from store', this.user);
@@ -52,7 +54,7 @@ export const store = new Vuex.Store({
           console.log(error.message)
           commit('setError', error.message)
           commit('setLoading', false)
-          main.$f7.dialog.alert(error.message)
+          this.$f7.dialog.alert(error.message)
         })
       return success
     },
@@ -67,7 +69,7 @@ export const store = new Vuex.Store({
           commit('setError', null)
           // location.reload()
           // success = true
-          main.$f7.router.navigate('/')
+          this.$f7.router.navigate('/')
         })
         .catch(error => {
           console.log('can\'t sign in')

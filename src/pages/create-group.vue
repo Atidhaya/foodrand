@@ -3,10 +3,9 @@
   <f7-page>
     <div class="page-content">
 
-      <p> <img data-src="/static/goahead.png" class="lazy lazy-fade-in picture-center"/></p>
+      <p> <img src="/static/goahead.png" class="picture-center"/> </p>
 
-
-    <f7-list no-hairlines-md>
+      <f7-list no-hairlines-md>
 
 
       <f7-list form>
@@ -49,6 +48,7 @@
   import F7Icon from "framework7-vue/src/components/icon";
   import F7View from "framework7-vue/src/components/view";
   import {db, auth} from '../firebase'
+  import shortid from "shortid"
 
 
 
@@ -77,14 +77,16 @@
           name: '',
           active: true,
           gid: '',
+          code: ''
         },
         dbgroup: {
           members: [],
           places: [],
           start: false,
-          name: ''
+          name: '',
+          code: ''
         },
-        user: {
+        me: {
           name: '',
           uid: ''
         },
@@ -94,31 +96,37 @@
     firebase: function () {
       return {
         user: {
-          source: db.ref('users/' + this.$store.state.user.uid)
+          source: db.ref('users/' + auth.currentUser.uid)
         }
       }
     },
     methods: {
       createGroup() {
+        var shortid = require('shortid')
+        var c = shortid.generate()
         this.usergroup.name = this.tempname
-        this.user.name = this.$store.state.user.displayName
-        this.user.uid = this.$store.state.user.uid
-        this.dbgroup.members.push(this.user)
+        this.usergroup.code = c
+        this.dbgroup.code = c
+        this.me.name = this.$store.state.user.displayName
+        this.me.uid = this.$store.state.user.uid
+        this.dbgroup.members.push(this.me)
         this.dbgroup.name = this.tempname
         const ukey = db.ref('users/' + this.$store.state.user.uid + '/groups/').push(this.usergroup).getKey()
         db.ref('users/' + this.$store.state.user.uid + '/groups/').child(ukey).update({'gid': ukey})
         this.dbgroup.gid = ukey
-        db.ref('groups/' + ukey).set(this.dbgroup)
+        db.ref('groups/'+ukey).set(this.dbgroup)
         this.clear()
         this.$f7.dialog.alert('Create success! You can check your group id in home menu')
       },
       clear() {
         this.usergroup.name = ''
         this.usergroup.gid = ''
+        this.usergroup.code = ''
         this.dbgroup.members = []
         this.dbgroup.places = []
         this.dbgroup.gid = ''
         this.dbgroup.name = ''
+        this.dbgroup.code = ''
         console.log('clear input!')
       }
     },

@@ -9,9 +9,11 @@
     </f7-tab>
 
     <f7-tab id="home" tab-active>
+
+
       <f7-page>
-        <f7-link @click="r()">go to j</f7-link>
-      <!--<f7-link @click="r()">go to j</f7-link>-->
+
+      <f7-link @click="r()">go to j</f7-link>
       <f7-row >
         <f7-col >
           <div class="swiper-container swiper-init demo-swiper" data-pagination='{"el": ".swiper-pagination"}'>
@@ -50,10 +52,11 @@
           <f7-list-item title="Nothing found"></f7-list-item>
         </f7-list>
 
+        <!--<f7-page>-->
         <!-- Search through this list -->
           <!--:title="group.name"-->
         <f7-list class="searchbar-found" id="search-list">
-          <f7-list-item   v-for="group in groups"   @swipeout:deleted="leaveGroup">
+          <f7-list-item   v-for="group in userGroups"   @swipeout:deleted="leaveGroup">
 
             <p @click="selectGroup(group['.key'],group.name)" >{{group.name}}</p>
             <f7-button @click="leaveGroup(group['.key'])">Leave</f7-button>
@@ -64,6 +67,7 @@
       </f7-block>
       </f7-page>
     </f7-tab>
+
     <f7-tab id="join-group" >
 
       <join-group></join-group>
@@ -209,6 +213,7 @@ export default {components: {
       groupTarget: '',
       user: auth.currentUser,
       vlData: {},
+      groups: []
     }
   },
   // mounted () {
@@ -225,6 +230,9 @@ export default {components: {
     return {
       groups:{
         source: db.ref('/groups/')
+      },
+      userGroups:{
+        source: db.ref('/users/'+auth.currentUser.uid+'/groups')
       },
       // groupList:{
       //   source: db.ref('/users/'+this.$store.state.user.uid+'/groups/')
@@ -270,7 +278,8 @@ export default {components: {
       this.$firebaseRefs.groups.child(gid).child('members').child(uid).remove()
       console.log("Delete Member ... ", uid ,' in ' , gid)
       //Access that member group list and set flag group
-      this.$firebaseRefs.all.child('users').child(uid).child('groups').child(gid).remove()
+      console.log(this.userGroups)
+      this.$firebaseRefs.userGroups.child(gid).remove()
       console.log('Leave',gid)
       // this.updatePlacesAndMembers()
     },

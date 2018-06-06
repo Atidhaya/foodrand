@@ -4,8 +4,7 @@
 
     <div class="page-content">
 
-      <p> <img data-src="/static/backup.png" class="lazy lazy-fade-in picture-center"/></p>
-
+      <p><img src="/static/backup.png" class="picture-center"/></p>
       <f7-list no-hairlines-md>
 
 
@@ -20,11 +19,9 @@
         </f7-list>
 
       </f7-list>
-
       <p class="segmented">
         <f7-button :disabled=disabled v-on:click="join" class="loader" >Join group!</f7-button>
       </p>
-
     </div>
 
   </f7-page>
@@ -47,9 +44,13 @@
   import F7Icon from "framework7-vue/src/components/icon";
   import F7View from "framework7-vue/src/components/view";
   import F7Input from "framework7-vue/src/components/input";
+  import shortid from "shortid"
+  import {auth, db} from '../firebase'
+  import F7Button from "framework7-vue/src/components/button";
 
 
   export default {components: {
+      F7Button,
       F7Input,
       F7View,
       F7Icon,
@@ -70,12 +71,40 @@
     data () {
       return {
         code: '',
-        disabled: true
+        disabled: true,
+      }
+    },
+    firebase: function () {
+      return {
+        allgroups: {
+          source: db.ref('groups/')
+        }
       }
     },
     methods: {
       join() {
-
+        var temp = []
+        var shortid = require('shortid')
+        if (shortid.isValid(this.code)) {
+          for (let i = 0; i < this.allgroups.length; i++) {
+            if (this.allgroups[i].code === this.code) {
+              db.ref('groups/' + this.allgroups[i]['.key']).once('value').then(function (snapshot) {
+                console.log(snapshot.val().members)
+                temp = snapshot.val().members
+              }).then( () => {
+                console.log(this.$store.state.user.displayName)
+                const user = {name: auth.currentUser.displayName, uid: auth.currentUser.uid}
+                console.log(user)
+                temp.push(user)
+                // db.ref('groups/' + key + '/members').set(temp)
+              })
+            }
+          }
+          this.$f7.dialog.alert('valid!')
+        }
+        else {
+          this.$f7.dialog.alert('invalid code group!')
+        }
       }
     },
     watch: {
