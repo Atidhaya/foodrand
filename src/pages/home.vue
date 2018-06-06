@@ -1,5 +1,6 @@
 <template xmlns:>
-  <f7-page color-theme="orange" >
+
+  <f7-page  color-theme="orange" >
     <!--swipeable-->
   <f7-tabs swipeable animated>
     <f7-tab id="create-group" >
@@ -8,7 +9,9 @@
     </f7-tab>
 
     <f7-tab id="home" tab-active>
-      <f7-link @click="r()">go to j</f7-link>
+      <f7-page>
+        <f7-link @click="r()">go to j</f7-link>
+      <!--<f7-link @click="r()">go to j</f7-link>-->
       <f7-row >
         <f7-col >
           <div class="swiper-container swiper-init demo-swiper" data-pagination='{"el": ".swiper-pagination"}'>
@@ -28,8 +31,9 @@
           <f7-nav-title>Group List</f7-nav-title>
         </f7-navbar>
       </f7-row>
+
       <f7-block>
-        <f7-searchbar
+      <f7-searchbar
           placeholder ="Search"
           search-container="#search-list"
           search-item="li"
@@ -47,21 +51,21 @@
         </f7-list>
 
         <!-- Search through this list -->
-        <f7-list class="searchbar-found" id="search-list">
           <!--:title="group.name"-->
-          <f7-list-item  v-for="group in groups"   @swipeout:deleted="leaveGroup">
+        <f7-list class="searchbar-found" id="search-list">
+          <f7-list-item   v-for="group in groups"   @swipeout:deleted="leaveGroup">
+
             <p @click="selectGroup(group['.key'],group.name)" >{{group.name}}</p>
             <f7-button @click="leaveGroup(group['.key'])">Leave</f7-button>
-            <!--<f7-swipeout-actions>-->
-              <!--<f7-swipeout-button delete>Delete</f7-swipeout-button>-->
-            <!--</f7-swipeout-actions>-->
+
           </f7-list-item>
         </f7-list>
-      </f7-block>
 
+      </f7-block>
+      </f7-page>
     </f7-tab>
     <f7-tab id="join-group" >
-      <f7-link @click="r()">go to j</f7-link>
+
       <join-group></join-group>
 
     </f7-tab>
@@ -81,7 +85,6 @@
     </f7-popup>
 
   </f7-page>
-
   <!--<f7-page>-->
     <!--<f7-navbar>-->
       <!--<f7-nav-left>-->
@@ -160,10 +163,13 @@ import F7Tabs from "framework7-vue/src/components/tabs";
 import {db,auth} from '../firebase.js';
 import F7Preloader from "framework7-vue/src/components/preloader";
 import F7Popover from "framework7-vue/src/components/popover";
+import F7ListItemContent from "framework7-vue/src/components/list-item-content";
+import firebase from 'firebase'
 
 
 
 export default {components: {
+    F7ListItemContent,
     F7Popover,
     F7Preloader,
     F7Tabs,
@@ -201,56 +207,64 @@ export default {components: {
       loading: true,
       popupOpen: false,
       groupTarget: '',
+      user: auth.currentUser,
       vlData: {},
     }
   },
+  // mounted () {
+  //   var temp = []
+  //   db.ref('users/'+this.$store.state.user.uid).once('value').then(function(snapshot) {
+  //     temp = snapshot.val().groups
+  //     console.log("mounted", temp)
+  //     this.groupList = temp
+  //   })
+  // },
   firebase: function () {
+  this.$store.dispatch('getUser')
+    console.log('dispatched user')
     return {
       groups:{
         source: db.ref('/groups/')
       },
+      // groupList:{
+      //   source: db.ref('/users/'+this.$store.state.user.uid+'/groups/')
+      // },
       users:{
         source: db.ref('/users/')
       }
     }
   },
+  // beforeUpdate(){
+  //
+  //   const uid = this.$store.state.user.uid
+  //   // const uid = "bsbbteLSIMOg4vhIuZa1m91LZRe2"
+  //   const userInfo = this.users.filter(user => user['.key'] === uid)[0]
+  //   //If user is in a group
+  //   console.log(userInfo.groups)
+  //   if(userInfo.groups !== undefined){
+  //     this.groupList = userInfo.groups
+  //   }
+  //
+  // },
   methods: {
     r(){
       // console.log(this)
+      console.log(this.groups);
       console.log(this.users);
+      console.log(this.groupList)
       // this.$f7router.navigate('/j/')
-      this.updateGroupList()
+      // this.updateGroupList()
     },
     updateGroupList (){
-      // const uid = this.$store.state.user.uid
-      // const uid ="6oJhVsJRpmgY4yFMQthMs9JzZXj1"
-      let temp =[]
-      const uid = "bsbbteLSIMOg4vhIuZa1m91LZRe2"
+      const uid = this.$store.state.user.uid
+      // const uid = "bsbbteLSIMOg4vhIuZa1m91LZRe2"
       const userInfo = this.users.filter(user => user['.key'] === uid)[0]
-      // if(userInfo.)
       //If user is in a group
       console.log(userInfo.groups)
       if(userInfo.groups !== undefined){
-        console.log(userInfo.groups)
-        // let iter = userInfo.groups.values()
-        for (let userGroup in userInfo.groups) {
-          // const groupKey = userGroup['.key']
-          console.log(groups[groupKey])
+          this.groupList = userInfo.groups
         }
-        // for(let i = 0; i<userInfo.groups.length; i++){
-        //   const groupKey = userInfo.groups[i]['.key']
-        //   console.log(groups[groupKey])
-        //   // temp.push(groups[groupKey])
-        // }
-
-        // temp = this.groups.filter(group =>
-        //   userInfo.groups.some(userGroup =>
-        //     userGroup['.key'] === group['.key']))
-      }
-      // let temp = this.
-
-      // this.groupList = temp
-    },
+   },
     leaveGroup( gid ){
       const uid = this.$store.state.user.uid
       this.$firebaseRefs.groups.child(gid).child('members').child(uid).remove()
@@ -281,9 +295,25 @@ export default {components: {
   },
   watch: {
     groups() {
-
+      console.log("Groups Watch")
+      this.updateGroupList()
+    },
+    groupList() {
+      const uid = this.$store.state.user.uid
+      // const uid = "bsbbteLSIMOg4vhIuZa1m91LZRe2"
+      const userInfo = this.users.filter(user => user['.key'] === uid)[0]
+      //If user is in a group
+      console.log(userInfo.groups)
+      if(userInfo.groups !== undefined){
+        this.groupList = userInfo.groups
+      }
     }
-  }
+  },
+  // computed: {
+  //   groupList () {
+  //     this.updateGroupList()
+  //   }
+  // }
 }
 </script>
 

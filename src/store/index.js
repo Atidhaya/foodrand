@@ -29,6 +29,9 @@ export const store = new Vuex.Store({
     pushMe ({commit}) {
       main.$f7.router.navigate('/sign-up/')
     },
+    getUser ({commit}) {
+      console.log('user from store', this.user);
+    },
     signUp ({commit}, payload) {
       console.log(payload.name)
       var success = false

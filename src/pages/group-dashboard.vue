@@ -19,7 +19,16 @@
 
         <f7-tab id="members" tab-active>
           <f7-block inset>
-            <h1 class="gid" >{{this.gid}}</h1>
+            <div class="codeBox"  >
+              <p></p>
+              <br/>
+            <f7-block >
+            <p class="gid" >:Access Code:</p><br/>
+            <h1 class="gid" >{{this.groups[0].code}}</h1><br/>
+            </f7-block>
+              <p></p>
+              <br/>
+            </div>
             <!--<h2 class="gid" >hhhhhhjhhhkjhkjhkjhjkhjkhkjhjkkjhk</h2>-->
             <p>MEMBERS</p>
             <f7-list contacts-list v-for="member in members"  >
@@ -293,6 +302,11 @@
 </script>
 
 <style>
+  .codeBox{
+    border-radius: 10px;
+    background-color: rgba(255,149,0,0.7);
+    color: white;
+  }
   .gid {
     position: absolute;
     top: 7%;
