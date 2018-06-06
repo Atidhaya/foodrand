@@ -81,7 +81,6 @@
           code: ''
         },
         dbgroup: {
-          members: [],
           places: [],
           start: false,
           name: '',
@@ -110,7 +109,6 @@
         this.dbgroup.code = c
         this.me.name = auth.currentUser.displayName
         this.me.uid = auth.currentUser.uid
-        this.dbgroup.members.push(this.me)
         this.dbgroup.name = this.tempname
         const ukey = db.ref('users/' + auth.currentUser.uid + '/groups/').push(this.usergroup).getKey()
         db.ref('users/' + auth.currentUser.uid + '/groups/').child(ukey).update({'gid': ukey})
@@ -123,7 +121,6 @@
         this.usergroup.name = ''
         this.usergroup.gid = ''
         this.usergroup.code = ''
-        this.dbgroup.members = []
         this.dbgroup.places = []
         this.dbgroup.gid = ''
         this.dbgroup.name = ''

@@ -5,10 +5,10 @@
 
     <f7-page>
 
-      <f7-button v-on:click="initiate" >Let's go eat!</f7-button>
+      <f7-button v-on:click="initiate()" >Let's go eat!</f7-button>
 
 
-      <f7-button v-on:click="initiate" >Randomize!</f7-button>
+      <f7-button v-on:click="randomize()" >Randomize!</f7-button>
 
 
       <p id="demo-determinate-container"></p>
@@ -29,16 +29,20 @@
     import F7Progressbar from "framework7-vue/src/components/progressbar";
     import {db} from '../firebase'
     import F7View from "framework7-vue/src/components/view";
+    import F7Navbar from "framework7-vue/src/components/navbar";
+    import F7Link from "framework7-vue/src/components/link";
+
 
     export default {
       name: "Initiate",
-      components: {F7View, F7Progressbar, F7Button, F7Page, F7Preloader},
+      components: {F7Link, F7Navbar, F7View, F7Progressbar, F7Button, F7Page, F7Preloader},
       props: ['gid'],
       data() {
           return {
             determinateLoading: false,
             progressBarEl: '',
-            progress: 0
+            progress: 0,
+            groupid: ''
           }
       },
       beforeCreate () {
@@ -50,16 +54,30 @@
           db.ref('groups'+this.gid).update({'start':true})
         },
         randomize() {
-          console.log("GID in Rand ",this.gid)
+          this.setgid()
+          console.log(this.gid)
+          console.log(this.food)
+          console.log(this.food.length)
+          console.log(this.database)
+          // console.log("GID in Rand ",this.gid)
+        },
+        setgid() {
+          this.groupid = this.gid
+          console.log(this.groupid)
+          console.log(this.gid)
         }
     },
       firebase: function () {
+        this.setgid()
         return {
           going: {
-            source: db.ref('groups/' + this.gid + '/going')
+            source: db.ref('groups/' + this.groupid + '/going')
           },
           food: {
-            source: db.ref('groups/' + this.gid + '/places')
+            source: db.ref('groups/' + this.groupid + '/places')
+          },
+          database: {
+            source: db.ref('groups/' + this.groupid)
           }
         }
       }

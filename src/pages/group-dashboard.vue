@@ -66,6 +66,7 @@
       </f7-popover>
 
     <f7-popup :opened= popupStart >
+      <f7-button @click="closePopup()">Back</f7-button>
       <initiate :gid= this.gid ></initiate>
     </f7-popup>
 
@@ -273,6 +274,7 @@
       openAddPlaces (){
         this.addPlacePopover = true
       },
+
       closeAddPlaces (){
         this.addPlacePopover = false
       },
@@ -289,8 +291,11 @@
 
         console.log("Target ",this.targetName)
       },
+      closePopup() {
+        this.popupStart = false
+      },
       closePopoverFood() {
-        this.popoverOpenFood =false
+        this.popoverOpenFood = false
       },
       closePopoverUser (){
         this.popoverOpenUser = false

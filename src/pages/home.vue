@@ -2,6 +2,7 @@
   <f7-page color-theme="orange" class="nopadding">
     <!--swipeable-->
   <f7-tabs swipeable animated>
+
     <f7-tab id="create-group" >
     <create-group></create-group>
 
@@ -96,7 +97,7 @@
       <f7-button @click="closePopup()">Back</f7-button>
       <group-dashboard :gid= groupTarget  @closePopup="closePopup"  ></group-dashboard>
     </f7-popup>
-    
+
 
   </f7-page>
   <!--<f7-page>-->
