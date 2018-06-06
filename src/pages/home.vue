@@ -258,7 +258,8 @@ export default {components: {
       // console.log(this)
       console.log(this.groups);
       console.log(this.users);
-      console.log(this.groupList)
+      console.log(this.groupList);
+      // console.log("Members in group ",this.groups[gid].members)
       // this.$f7router.navigate('/j/')
       // this.updateGroupList()
     },
@@ -274,11 +275,13 @@ export default {components: {
    },
     leaveGroup( gid ){
       const uid = this.$store.state.user.uid
-      this.$firebaseRefs.groups.child(gid).child('members').child(uid).remove()
+      // Delete member from the group
+      console.log(this.groups[gid].members)
+      // this.$firebaseRefs.groups.child(gid).child('members').child(uid).remove()
       console.log("Delete Member ... ", uid ,' in ' , gid)
       //Access that member group list and set flag group
       console.log(this.userGroups)
-      this.$firebaseRefs.userGroups.child(gid).remove()
+      // this.$firebaseRefs.userGroups.child(gid).remove()
       console.log('Leave',gid)
       // this.updatePlacesAndMembers()
     },
