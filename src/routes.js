@@ -5,6 +5,8 @@ import DynamicRoutePage from './pages/dynamic-route.vue';
 import NotFoundPage from './pages/not-found.vue';
 import SignIn from './authentication/sign-in.vue'
 import SignUp from './authentication/sign-up.vue'
+import Signout from './authentication/sign-out';
+import Initiate from './pages/Initiate'
 
 import PanelLeftPage from './pages/panel-left.vue';
 import PanelRightPage from './pages/panel-right.vue';
@@ -24,6 +26,14 @@ export default [
   {
     path: '/sign-up/',
     component: SignUp,
+  },
+  {
+    path: '/sign-out/',
+    component: Signout
+  },
+  {
+    path: '/initiate/',
+    component: Initiate
   },
   {
     path: '/panel-left/',

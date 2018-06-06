@@ -2,16 +2,23 @@
   <f7-view>
   <f7-page>
 
-    <div class="page-content">
-
-      <p><img src="/static/backup.png" class="picture-center"/></p>
       <f7-list no-hairlines-md>
+
+        <f7-list>
+
+          <f7-list-item >
+            <p><img src="/static/backup.png" class="picture-center"/></p>
+
+            <br/>
+
+          </f7-list-item>
+
+        </f7-list>
 
 
         <f7-list form>
 
           <f7-list-item>
-            <f7-icon icon-f7="demo-list-icon" slot="media"></f7-icon>
             <f7-input :value="code" @input="code = $event.target.value"  type="text" placeholder="Group code here...!" clear-button></f7-input>
 
 
@@ -22,7 +29,6 @@
       <p class="segmented">
         <f7-button :disabled=disabled v-on:click="join" class="loader" >Join group!</f7-button>
       </p>
-    </div>
 
   </f7-page>
   </f7-view>
