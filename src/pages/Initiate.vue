@@ -37,11 +37,13 @@
           }
       },
       beforeCreate () {
+        console.log("GID in Rand ",this.gid)
       },
       methods: {
         initiate() {
-          db.ref('groups'+this.gid+'/going').set({name:auth.currentUser.displayName, uid:auth.currentUser.uid})
-          db.ref('groups'+this.gid).update({'start':true})
+          console.log("GID in Rand ",this.gid)
+          // db.ref('groups'+this.gid+'/going').set({name:auth.currentUser.displayName, uid:auth.currentUser.uid})
+          // db.ref('groups'+this.gid).update({'start':true})
         }
     },
       firebase: function () {

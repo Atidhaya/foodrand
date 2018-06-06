@@ -13,7 +13,7 @@
     <!--</f7-navbar>-->
     <f7-button @click="a()">sdsdsd</f7-button>
 
-    <f7-button outline color="green" fill raised big>Let's go eat!</f7-button>
+    <f7-button outline color="green" fill raised big @click="start()">Let's go eat!</f7-button>
 
       <f7-tabs swipeable animated>
 
@@ -65,6 +65,10 @@
         </f7-list>
       </f7-popover>
 
+    <f7-popup :opened= popupStart >
+      <initiate :gid= this.gid ></initiate>
+    </f7-popup>
+
     <f7-toolbar tabbar labels>
       <f7-link icon-f7="persons_fill" text="Members" tab-link="#members" ></f7-link>
       <f7-link icon-f7="heart_fill" text="Food Places" tab-link="#places" ></f7-link>
@@ -95,9 +99,13 @@
   import F7View from "framework7-vue/src/components/view";
   import F7Tabs from "framework7-vue/src/components/tabs";
   import {db} from '../firebase.js';
+  import F7Popup from "framework7-vue/src/components/popup";
+  import Initiate from "./Initiate"
 
 
   export default {components: {
+      Initiate,
+      F7Popup,
       F7Tabs,
       F7View,
       F7Popover,
@@ -128,6 +136,7 @@
         popoverOpenFood: false,
         popoverOpenUser: false,
         addPlacePopover: false,
+        popupStart: false,
         members: [],
         groups: [],
         places: {},
@@ -170,6 +179,10 @@
         // this.$f7router.navigate('/about/')
         // this.$f7.router.navigate('/about/')
         // view.router.navigate('/about/')
+      },
+      start (){
+        console.log("Starting Rand")
+        this.popupStart =true
       },
       createFood (){
         console.log("Add food")
