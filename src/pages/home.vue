@@ -1,6 +1,5 @@
 <template xmlns:>
   <f7-page color-theme="orange" class="nopadding">
-    <!--swipeable-->
   <f7-tabs swipeable animated>
 
     <f7-tab id="create-group" >
@@ -9,12 +8,9 @@
 
     <f7-tab id="home" tab-active >
       <f7-page id="noPadding">
-        <!--<div v-if="infiniteLoading" >-->
-          <!--<f7-progressbar infinite color="multi"></f7-progressbar>-->
-        <!--</div>-->
-        <!--<f7-button @click="r()">Pasdasdadas</f7-button>-->
 
-      <!--<f7-link @click="r()">go to j</f7-link>-->
+
+      <!--<f7-link @click="r()">HOMEDEBUG</f7-link>-->
       <f7-row >
         <f7-col >
           <div class="swiper-container swiper-init demo-swiper" data-pagination='{"el": ".swiper-pagination"}'>
@@ -27,11 +23,8 @@
               <div class="swiper-slide">Ad 5</div>
             </div>
           </div>
-          <!--<f7-swiper scrollbar :slidesPerView="auto" :loopedSlides=3 :loop="true">-->
-            <!--<f7-swiper-slide >Ad 1</f7-swiper-slide>-->
-            <!--<f7-swiper-slide >Ad 2</f7-swiper-slide>-->
-            <!--<f7-swiper-slide>Ad 3</f7-swiper-slide>-->
-          <!--</f7-swiper>-->
+
+
         </f7-col>
       </f7-row>
       <f7-row >
@@ -58,9 +51,7 @@
           <f7-list-item title="Nothing found"></f7-list-item>
         </f7-list>
 
-        <!--<f7-page>-->
-        <!-- Search through this list -->
-          <!--:title="group.name"-->
+
         <f7-list class="searchbar-found" id="search-list">
           <f7-list-item   v-for="group in userGroups"   @swipeout:deleted="leaveGroup">
 
@@ -84,9 +75,6 @@
       <sign-out></sign-out>
     </f7-tab>
 
-    <!--<f7-tab id="initiate">-->
-      <!--<initiate></initiate>-->
-    <!--</f7-tab>-->
   </f7-tabs>
 
 
@@ -106,56 +94,6 @@
 
 
   </f7-page>
-  <!--<f7-page>-->
-    <!--<f7-navbar>-->
-      <!--<f7-nav-left>-->
-        <!--<f7-link icon-if-ios="f7:menu" icon-if-md="material:menu" panel-open="left"></f7-link>-->
-      <!--</f7-nav-left>-->
-      <!--<f7-nav-title>My App</f7-nav-title>-->
-      <!--<f7-nav-right>-->
-        <!--<f7-link icon-if-ios="f7:menu" icon-if-md="material:menu" panel-open="right"></f7-link>-->
-      <!--</f7-nav-right>-->
-    <!--</f7-navbar>-->
-    <!--<f7-toolbar>-->
-      <!--<f7-link>Left Link</f7-link>-->
-      <!--<f7-link>Right Link</f7-link>-->
-    <!--</f7-toolbar>-->
-    <!--<f7-block strong>-->
-      <!--<p>Here is your blank Framework7 app. Let's see what we have here.</p>-->
-    <!--</f7-block>-->
-    <!--<f7-block-title>Navigation</f7-block-title>-->
-    <!--<f7-list>-->
-      <!--<f7-list-item link="/about/" title="About"></f7-list-item>-->
-      <!--<f7-list-item link="/form/" title="Form"></f7-list-item>-->
-    <!--</f7-list>-->
-    <!--<f7-block-title>Modals</f7-block-title>-->
-    <!--<f7-block strong>-->
-      <!--<f7-row>-->
-        <!--<f7-col width="50">-->
-          <!--<f7-button fill raised popup-open="#popup">Popup</f7-button>-->
-          <!--<f7-button fill raised popup-open="#popup2">Popup2</f7-button>-->
-        <!--</f7-col>-->
-        <!--<f7-col width="50">-->
-          <!--<f7-button fill raised login-screen-open="#login-screen">Login Screen</f7-button>-->
-        <!--</f7-col>-->
-      <!--</f7-row>-->
-    <!--</f7-block>-->
-    <!--<f7-block-title>Panels</f7-block-title>-->
-    <!--<f7-block strong>-->
-      <!--<f7-row>-->
-        <!--<f7-col width="50">-->
-          <!--<f7-button fill raised panel-open="left">Left Panel</f7-button>-->
-        <!--</f7-col>-->
-        <!--<f7-col width="50">-->
-          <!--<f7-button fill raised panel-open="right">Right Panel</f7-button>-->
-        <!--</f7-col>-->
-      <!--</f7-row>-->
-    <!--</f7-block>-->
-    <!--<f7-list>-->
-      <!--<f7-list-item link="/dynamic-route/blog/45/post/125/?foo=bar#about" title="Dynamic Route"></f7-list-item>-->
-      <!--<f7-list-item link="/load-something-that-doesnt-exist/" title="Default Route (404)"></f7-list-item>-->
-    <!--</f7-list>-->
-  <!--</f7-page>-->
 
 </template>
 <script>
@@ -225,6 +163,7 @@ export default {components: {
     F7Row,
     F7Page
   },
+  props: ['popupOverrideFlag'],
   data () {
     return {
         items: [{gid: '1', name: 'group 1',
@@ -244,14 +183,7 @@ export default {components: {
       infiniteLoading: true,
     }
   },
-  // mounted () {
-  //   var temp = []
-  //   db.ref('users/'+this.$store.state.user.uid).once('value').then(function(snapshot) {
-  //     temp = snapshot.val().groups
-  //     console.log("mounted", temp)
-  //     this.groupList = temp
-  //   })
-  // },
+
   firebase: function () {
   this.$store.dispatch('getUser')
     console.log('dispatched user')
@@ -262,50 +194,26 @@ export default {components: {
       userGroups:{
         source: db.ref('/users/'+auth.currentUser.uid+'/groups')
       },
-      // groupList:{
-      //   source: db.ref('/users/'+this.$store.state.user.uid+'/groups/')
-      // },
       users:{
         source: db.ref('/users/')
       }
     }
   },
-  // beforeUpdate(){
-  //
-  //   const uid = this.$store.state.user.uid
-  //   // const uid = "bsbbteLSIMOg4vhIuZa1m91LZRe2"
-  //   const userInfo = this.users.filter(user => user['.key'] === uid)[0]
-  //   //If user is in a group
-  //   console.log(userInfo.groups)
-  //   if(userInfo.groups !== undefined){
-  //     this.groupList = userInfo.groups
-  //   }
-  //
-  // },
   methods: {
     r(){
-      if(this.infiniteLoading){
-        this.infiniteLoading =false
-      }else{
-        this.infiniteLoading = true
-      }
-      Framework7
-      // console.log(this)
       console.log(this.infiniteLoading)
       console.log(this.groups);
       console.log(this.users);
       console.log(this.groupList);
+      console.log(this.$store.state.going)
 
-      // console.log("Members in group ",this.groups[gid].members)
-      // this.$f7router.navigate('/j/')
-      // this.updateGroupList()
     },
     updateGroupList (){
       const uid = this.$store.state.user.uid
       // const uid = "bsbbteLSIMOg4vhIuZa1m91LZRe2"
       const userInfo = this.users.filter(user => user['.key'] === uid)[0]
       //If user is in a group
-      console.log(userInfo.groups)
+      // console.log(userInfo.groups)
       if(userInfo.groups !== undefined){
           this.groupList = userInfo.groups
         }
@@ -320,9 +228,9 @@ export default {components: {
       return -1
     } ,
     findIndexUsingUid (list, targetUid){
-      console.log('TargetList: ',list)
+      // console.log('TargetList: ',list)
       for(let i = 0; i<list.length; i++){
-        console.log(list[i],targetUid)
+        // console.log(list[i],targetUid)
         if(list[i].uid === targetUid){
           return i
         }
@@ -340,16 +248,16 @@ export default {components: {
       }else{
         this.$firebaseRefs.groups.child(gid +'/members/' + userIndex).remove()
       }
-      console.log("Delete Member ... ", uid ,' in ' , gid)
+      // console.log("Delete Member ... ", uid ,' in ' , gid)
 
       //Access that member group list and set flag group
       // console.log('UserGroup',this.userGroups)
       this.$firebaseRefs.userGroups.child(gid).remove()
-      console.log('Leave',gid)
+      // console.log('Leave',gid)
       this.updateGroupList()
     },
     selectGroup( id, name ){
-      console.log('SELECT',id,name)
+      // console.log('SELECT',id,name)
       this.popupOpen = true
       this.groupTarget = id
     },
@@ -367,19 +275,23 @@ export default {components: {
       this.vlData = vlData;
     },
   },
+  computed: {
+    popupOverride () {
+      return  this.$store.state.going
+    }
+  },
   watch: {
     groups() {
       console.log("Groups Watch")
       this.updateGroupList()
     },
+    popupOverride(){
+      console.log("OVERRIDE POPUP")
+      this.closePopup()
+    },
 
   },
-  created() {
-  // if(reload){
-  //   location.reload()
-  // }
-  //   console.log(this.$store.state.user)
-  }
+
 }
 </script>
 

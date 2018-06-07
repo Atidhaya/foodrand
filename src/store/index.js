@@ -13,6 +13,7 @@ export const store = new Vuex.Store({
     user: null,
     error: null,
     loading: false,
+    going: false
   },
   mutations: {
     setUser (state, payload) {
@@ -24,6 +25,9 @@ export const store = new Vuex.Store({
     setLoading (state, payload) {
       state.loading = payload
     },
+    setGoing (state, payload) {
+      state.going = payload
+    }
   },
   actions: {
     setUser ({commit}, payload) {
@@ -34,6 +38,9 @@ export const store = new Vuex.Store({
     },
     setError ({commit}, payload) {
       commit('setError', payload)
+    },
+    setGoing ({commit}, payload) {
+      commit('setGoing', payload)
     },
     pushMe ({commit}) {
       // console.log(unsubscribe)
