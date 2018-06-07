@@ -143,27 +143,27 @@ export default {
       dbRef.transaction(function(snapshot) {
         console.log(snapshot)
         if(snapshot === null){
-          db.ref('groups/'+tempkey).set({'notgo':1})
+          db.ref('groups/'+tempkey+'/notgo').set(1)
         }
         else {
-          db.ref('groups/'+tempkey).update({'notgo':snapshot+1})
+          db.ref('groups/'+tempkey+'/notgo').set(snapshot+1)
         }
       })
     }
   },
   watch: {
     target: function () {
-      // console.log('Someone prompt the let\'s eat!')
-      // console.log(this.target)
-      // console.log(this.target[2]['.value'])
-      // console.log(this.target['target'])
       for(let i =0; i<this.target.length;i++){
         if(this.target[i]['.key'] === 'target'){
           if(this.target[i]['.value'] !== 'none') {
             this.key = this.target[i]['.value']
-            // db.ref('users/'+auth.currentUser.uid).update({'target': 'none'})
-            this.$f7.dialog.confirm('Group name have invite you to eat!','Foodrand', this.go, this.reject)
-
+            let name = ''
+            db.ref('groups/' + this.key).once('value').then(function (snapshot) {
+              name = snapshot.val().name
+            }).then(()=> {
+              console.log(db.ref('groups/'+this.key))
+              this.$f7.dialog.confirm('Group ' +name+ ' have invite you to eat!','Foodrand', this.go, this.reject)
+            })
           }
         }
       }

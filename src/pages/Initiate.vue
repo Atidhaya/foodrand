@@ -5,20 +5,45 @@
 
     <f7-page>
 
+
+      <div v-if="infiniteLoading" >
       <f7-button v-on:click="initiate()" >Let's go eat!</f7-button>
+      </div>
 
-
-      <f7-button v-on:click="randomize()" >Randomize!</f7-button>
-
+      <div v-if="allowrandom" >
+      <f7-button :disabled=waitForResponse v-on:click="randomize()" >Randomize!</f7-button>
+      </div>
 
       <div v-if="infiniteLoading" >
       <f7-progressbar infinite color="multi"></f7-progressbar>
       </div>
 
+
+      <div v-if="waitForResponse" class="align-self-center">
+        <f7-progressbar infinite color="multi"></f7-progressbar>
+      </div>
+
+      <div v-if="waitForResponse" class="align-self-center">
+        <h1> {{this.food[this.chosenOne]}}</h1>
+      </div>
+
+      <div v-if="waitForResponse || finalized" class="align-self-center">
+        <h1> Vote yes : {{this.yes}}</h1>
+      </div>
+
+      <div v-if="waitForResponse || finalized" class="align-self-center">
+      <h1> Vote no : {{this.no}}</h1>
+    </div>
+
+      <div v-if="finalized" class="align-self-center">
+        <f7-button v-on:click="confirm" >I'm happy ﾍ(=￣∇￣)ﾉ</f7-button>
+      </div>
+
+      <div v-if="finalized" class="align-self-center">
+        <f7-button v-on:click="reset()" >Again please ヽ(´ー`)ﾉ</f7-button>
+      </div>
+
     </f7-page>
-
-  <!--<f7-preloader color="green" size="44px"></f7-preloader>-->
-
 
   </f7-view>
 
@@ -47,8 +72,17 @@
             food: [],
             groups: [],
             chosenOne: '',
-            people: [],
-            infiniteLoading: true
+            goingpeople: [],
+            allpeople: 0,
+            notgopeople: 0,
+            infiniteLoading: true,
+            allowrandom: false,
+            waitForResponse: false,
+            finalized: false,
+            yes: 0,
+            no: 0,
+            total: 0,
+            satisfied: false
           }
       },
       beforeCreate () {
@@ -60,13 +94,9 @@
           var group = []
           group.push({name:auth.currentUser.displayName, uid:auth.currentUser.uid})
           db.ref('groups/'+this.gid+'/going').set(group)
-          console.log(db.ref('groups/'+this.gid+'/going'))
           db.ref('groups/'+this.gid).update({'start':true})
           db.ref('groups/'+this.gid+'/members').once('value').then(function (snapshot){
-            console.log(snapshot.val())
             for(let people in snapshot.val()){
-              // console.log(snapshot.val()[0])
-              console.log(snapshot.val()[people].uid)
               if(auth.currentUser.uid !== snapshot.val()[people].uid){
                 db.ref('users/'+snapshot.val()[people].uid).update({'target': temp})
               }
@@ -74,16 +104,18 @@
           })
         },
         randomize() {
-          this.chosenOne = Math.floor(Math.random() * (this.food.length+ 1))
-          console.log(this.chosenOne)
+          this.chosenOne = Math.floor(Math.random() * (this.food.length))
+          db.ref('groups/'+this.gid).update({'chosenfood': this.food[this.chosenOne]})
+          this.waitForResponse = true
+          this.finalized = false
+          this.allowrandom = false
+
         },
         setFood() {
           let temp = []
           for(let i = 0; i < this.groups.length; i++) {
             if(this.groups[i]['.key'] === this.gid) {
               for(let p in this.groups[i].places){
-                console.log('our food:',this.groups[i].places[p])
-                console.log(this.groups[i].places[p].name)
                 temp.push(this.groups[i].places[p].name)
               }
             }
@@ -91,26 +123,110 @@
           this.food = temp
         },
         setPeople() {
+          let temppeep = 0
           for(let i = 0; i < this.groups.length; i++) {
-            // console.log('loop through group....',this.groups[i]['.key'])
-            // console.log('Correct ? ..', this.groups[i]['.key'] === this.gid)
             if(this.groups[i]['.key'] === this.gid) {
-              this.people = this.groups[i].going
+              if(this.groups[i].going !== undefined) {
+                this.goingpeople = this.groups[i].going
+              }
+              if(this.groups[i].notgo !== undefined) {
+                this.notgopeople = this.groups[i].notgo
+              }
+              console.log('groups member: ', this.groups[i].members)
+              for(let people in this.groups[i].members){
+                temppeep += 1
+              }
             }
           }
+          this.allpeople = temppeep
         },
-
+        setLoading() {
+          if ((this.goingpeople.length + this.notgopeople) === this.allpeople) {
+            this.infiniteLoading = false
+          }
+        },
+        setVote() {
+          let tempyes = 0
+          let tempno = 0
+          db.ref('groups/'+this.gid+'/vote').once('value').then(function(snapshot){
+            if(snapshot.val() === null){
+            }
+            else{
+              if(snapshot.val().yes !== undefined) {
+                console.log('yes before pass in ', snapshot.val().yes )
+                tempyes = snapshot.val().yes
+              }
+              if(snapshot.val().no !== undefined) {
+                console.log('no before pass in ', snapshot.val().no )
+                tempno = snapshot.val().no
+              }
+            }
+          }).then( ()=> {
+            this.yes  = tempyes
+            this.no = tempno
+          })
+        },
+        confirm() {
+          db.ref('groups/'+this.gid).update({'start':false})
+          db.ref('groups/'+this.gid).child('chosenfood').remove()
+          db.ref('groups/'+this.gid).child('going').remove()
+          db.ref('groups/'+this.gid).child('vote').remove()
+          db.ref('groups/'+this.gid).child('notgo').remove()
+          this.satisfied = true
+          this.$f7.dialog.alert("Enjoy your food! (ﾉ≧∀≦)ﾉ*:・ﾟ✧", this.reload)
+        },
+        reset() {
+          db.ref('groups/'+this.gid).update({'chosenfood': ''})
+          db.ref('groups/'+this.gid).child('vote').remove()
+          this.randomize()
+        },
+        reload() {
+          location.reload()
+        }
     },
       watch: {
         gid: function (){
           console.log('watch gid from Initiate')
           this.setFood()
+          this.setPeople()
+          this.setVote()
         },
         groups: function (){
           console.log('watch groups')
           this.setFood()
           this.setPeople()
-
+          this.setVote()
+        },
+        goingpeople: function () {
+          this.setLoading()
+        },
+        allpeople: function () {
+          this.setLoading()
+        },
+        notgopeople: function () {
+          this.setLoading()
+        },
+        infiniteLoading: function () {
+          if(this.infiniteLoading === false){
+            this.allowrandom = true
+          }
+        },
+        yes: function () {
+          this.setVote()
+          this.total = this.yes + this.no
+          if (this.total === (this.goingpeople.length) - 1) {
+            this.waitForResponse = false
+            this.finalized = true
+          }
+        },
+        no: function () {
+          this.setVote()
+            this.total = this.yes+this.no
+            if(this.total >= (this.goingpeople.length)-1) {
+              // this.allowrandom = true
+              this.waitForResponse = false
+              this.finalized = true
+            }
         }
       },
       firebase: function () {
@@ -123,6 +239,17 @@
     }
 </script>
 
-<style scoped>
+<style>
+  .picture-center {
+    position: absolute;
+    top: 7%;
+    left: 40%;
+    transform: translate(-50%, -50%);
+    display: block;
 
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+  }
 </style>
+

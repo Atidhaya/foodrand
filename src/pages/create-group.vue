@@ -145,7 +145,7 @@
   .picture-center {
     position: absolute;
     top: 7%;
-    left: 40%;
+    left: 80%;
     transform: translate(-50%, -50%);
     display: block;
 
