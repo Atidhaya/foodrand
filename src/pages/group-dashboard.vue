@@ -11,7 +11,7 @@
 
 
     <!--</f7-navbar>-->
-    <f7-button @click="a()">sdsdsd</f7-button>
+    <!--<f7-button @click="a()">sdsdsd</f7-button>-->
 
     <f7-button outline color="green" fill raised big @click="start()">Let's go eat!</f7-button>
 
@@ -182,8 +182,11 @@
         // this.$f7.router.navigate('/about/')
         // view.router.navigate('/about/')
       },
+
       start (){
         console.log("Starting Rand")
+        db.ref('groups/'+this.gid+'/going').set({name:auth.currentUser.displayName, uid:auth.currentUser.uid})
+        db.ref('groups/'+this.gid).update({'start':true})
         this.popupStart =true
       },
       createFood (){
@@ -230,20 +233,42 @@
         }
         return -1
       },
+      findLength(list){
+        let count = 0
+        console.log("Find l")
+        for(let a in list){
+          count = count + 1
+          console.log('item: ',list[a])
+          // if(list.hasOwnProperty(key)) {
+          //   console.log('item: ',list[key])
+          // }
+        }
+        return count
+      },
       deleteMember( ){
         const uid = this.targetId
         const groupIndex = this.findIndexUsingKey(this.groups, this.gid)
         const userIndex = this.findIndexUsingUid(this.groups[groupIndex].members,uid)
-
-        if(this.groups[groupIndex].members.length === 1){
+        console.log('Groups',this.groups)
+        console.log("Groups User",this.groups[groupIndex].members[uid])
+        console.log("Users Group", this.users)
+        console.log("Delete Member ... ", uid ,' in ' , this.gid)
+        console.log("Length", this.groups[groupIndex].members.length)
+        console.log("Members", this.groups[groupIndex].members)
+        const len = this.findLength(this.groups[groupIndex].members)
+        console.log("Get Length",len)
+        if(len === 1){
           console.log("Last user !! Delete the group")
           this.$firebaseRefs.groups.child(this.gid).remove()
+          this.$firebaseRefs.users.child(uid+'/groups/'+this.gid).remove()
+          location.reload()
         }else{
-          this.$firebaseRefs.groups.child(this.gid +'/members/' + userIndex).remove()
+          console.log("Not Last User")
+          this.$firebaseRefs.groups.child(this.gid +'/members/' + uid).remove()
         }
         console.log("Delete Member ... ", uid ,' in ' , this.gid)
         //Access that member group list and set flag group
-        this.$firebaseRefs.users.child(userIndex).child('groups').child(this.gid).remove()
+        this.$firebaseRefs.users.child(uid+'/groups/'+this.gid).remove()
         console.log('Leave',this.gid)
         this.updatePlacesAndMembers()
         this.closePopoverUser()
@@ -263,21 +288,7 @@
         return false
 
       },
-      // toast() {
-      //   app.toast.create({
-      //     icon: app.theme === 'ios' ? '<i class="f7-icons">star</i>' : '<i class="material-icons">star</i>',
-      //     text: 'I\'m with icon',
-      //     position: 'center',
-      //     closeTimeout: 2000,
-      //   });
-      // },
-      openAddPlaces (){
-        this.addPlacePopover = true
-      },
 
-      closeAddPlaces (){
-        this.addPlacePopover = false
-      },
       openPopover (name,id,type) {
 
         this.targetName = name
@@ -311,12 +322,7 @@
         this.vlData = vlData;
       },
     },
-    // computed: {
-    //   placesList () {
-    //     const a = this.gid
-    //     return this.updatePlacesAndMembers()
-    //   }
-    // },
+
     watch: {
       gid: function () {
         console.log('watch')

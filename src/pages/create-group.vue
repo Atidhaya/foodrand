@@ -84,7 +84,8 @@
           places: [],
           start: false,
           name: '',
-          code: ''
+          code: '',
+          members: {}
         },
         me: {
           name: '',
