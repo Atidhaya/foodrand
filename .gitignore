@@ -54,6 +54,8 @@ src/fonts
 
 # End of https://www.gitignore.io/api/firebase
 
+# Created by https://www.gitignore.io/api/apachecordova
+
 ### ApacheCordova ###
 # Apache Cordova generated files and directories
 bin/*

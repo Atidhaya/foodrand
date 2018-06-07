@@ -1,4 +1,4 @@
-import firebase from 'src/firebase'
+import firebase from 'firebase'
 
 const config = {
     apiKey: "AIzaSyAc3RQl0n6lJZ9Icly-SK9n0MocPVaRjc0",
@@ -8,6 +8,7 @@ const config = {
     storageBucket: "foodrand-28596.appspot.com",
     messagingSenderId: "916985906806"
 }
+
 
 firebase.initializeApp(config)
 
