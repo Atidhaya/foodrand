@@ -110,14 +110,45 @@ export default {
   data () {
     return{
       target:'',
-      groupname:''
+      groupname:'',
+      key:''
     }
   },
   firebase: function() {
     return {
       target: {
         source: db.ref('users/' + auth.currentUser.uid)
+      },
+      groups: {
+        source: db.ref('groups/')
       }
+    }
+  },
+  methods: {
+    go() {
+      console.log('passed key:',this.key)
+      let tempkey = this.key
+      var dbRef = db.ref('groups/'+tempkey+'/going');
+      dbRef.transaction(function(snapshot) {
+        snapshot.push({name: auth.currentUser.displayName, uid:auth.currentUser.uid})
+        db.ref('groups/'+tempkey+'/going').set(snapshot)
+        db.ref('users/'+auth.currentUser.uid).update({'target':'none'})
+      })
+    },
+    reject () {
+      console.log('REJECTED')
+      let tempkey = this.key
+      db.ref('users/'+auth.currentUser.uid).update({'target':'none'})
+      var dbRef = db.ref('groups/'+tempkey+'/notgo');
+      dbRef.transaction(function(snapshot) {
+        console.log(snapshot)
+        if(snapshot === null){
+          db.ref('groups/'+tempkey).set({'notgo':1})
+        }
+        else {
+          db.ref('groups/'+tempkey).update({'notgo':snapshot+1})
+        }
+      })
     }
   },
   watch: {
@@ -129,9 +160,9 @@ export default {
       for(let i =0; i<this.target.length;i++){
         if(this.target[i]['.key'] === 'target'){
           if(this.target[i]['.value'] !== 'none') {
-            var groupid = this.target['target']
+            this.key = this.target[i]['.value']
             // db.ref('users/'+auth.currentUser.uid).update({'target': 'none'})
-            this.$f7.dialog.prompt('Group name have invite you to eat!','Foodrand','Yes')
+            this.$f7.dialog.confirm('Group name have invite you to eat!','Foodrand', this.go, this.reject)
 
           }
         }

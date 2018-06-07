@@ -11,7 +11,9 @@
       <f7-button v-on:click="randomize()" >Randomize!</f7-button>
 
 
-      <p id="demo-determinate-container"></p>
+      <div v-if="infiniteLoading" >
+      <f7-progressbar infinite color="multi"></f7-progressbar>
+      </div>
 
     </f7-page>
 
@@ -45,7 +47,8 @@
             food: [],
             groups: [],
             chosenOne: '',
-            notifypeople: []
+            people: [],
+            infiniteLoading: true
           }
       },
       beforeCreate () {
@@ -54,33 +57,29 @@
       methods: {
         initiate() {
           var temp = this.gid
-          db.ref('groups/'+this.gid+'/going').set({name:auth.currentUser.displayName, uid:auth.currentUser.uid})
+          var group = []
+          group.push({name:auth.currentUser.displayName, uid:auth.currentUser.uid})
+          db.ref('groups/'+this.gid+'/going').set(group)
+          console.log(db.ref('groups/'+this.gid+'/going'))
           db.ref('groups/'+this.gid).update({'start':true})
           db.ref('groups/'+this.gid+'/members').once('value').then(function (snapshot){
             console.log(snapshot.val())
             for(let people in snapshot.val()){
-              console.log(snapshot.val()[0])
+              // console.log(snapshot.val()[0])
               console.log(snapshot.val()[people].uid)
               if(auth.currentUser.uid !== snapshot.val()[people].uid){
-              db.ref('users/'+snapshot.val()[people].uid).update({'target': temp})
+                db.ref('users/'+snapshot.val()[people].uid).update({'target': temp})
               }
             }
           })
         },
         randomize() {
-          console.log(this.food)
-          console.log(this.food.length)
           this.chosenOne = Math.floor(Math.random() * (this.food.length+ 1))
           console.log(this.chosenOne)
         },
         setFood() {
           let temp = []
-          // // console.log(this.groups)
-          // // console.log(this.groups.length)
-          // // console.log('our key',this.gid)
           for(let i = 0; i < this.groups.length; i++) {
-            // console.log('loop through group....',this.groups[i]['.key'])
-            // console.log('Correct ? ..', this.groups[i]['.key'] === this.gid)
             if(this.groups[i]['.key'] === this.gid) {
               for(let p in this.groups[i].places){
                 console.log('our food:',this.groups[i].places[p])
@@ -91,6 +90,16 @@
           }
           this.food = temp
         },
+        setPeople() {
+          for(let i = 0; i < this.groups.length; i++) {
+            // console.log('loop through group....',this.groups[i]['.key'])
+            // console.log('Correct ? ..', this.groups[i]['.key'] === this.gid)
+            if(this.groups[i]['.key'] === this.gid) {
+              this.people = this.groups[i].going
+            }
+          }
+        },
+
     },
       watch: {
         gid: function (){
@@ -100,6 +109,8 @@
         groups: function (){
           console.log('watch groups')
           this.setFood()
+          this.setPeople()
+
         }
       },
       firebase: function () {
