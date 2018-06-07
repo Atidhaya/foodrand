@@ -16,9 +16,9 @@
           <div class="swiper-container swiper-init demo-swiper" data-pagination='{"el": ".swiper-pagination"}'>
             <div class="swiper-pagination"></div>
             <div class="swiper-wrapper">
-              <div class="swiper-slide">Ad 1</div>
+              <div class="swiper-slide"> <img src="static/foodrand.png" style="width: 200px"/> </div>
               <div class="swiper-slide">Ad 2</div>
-              <div class="swiper-slide">Ad 3</div>
+              <div class="swiper-slide"><img src="static/aj.jpg" style="width: 300px; height: 150px"/></div>
               <div class="swiper-slide">Ad 4</div>
               <div class="swiper-slide">Ad 5</div>
             </div>
@@ -274,6 +274,7 @@ export default {components: {
     renderExternal(vl, vlData) {
       this.vlData = vlData;
     },
+
   },
   computed: {
     popupOverride () {
@@ -345,5 +346,8 @@ export default {components: {
     height: 48px; /* required padding bottom */
     display: block;
     width: 1px;
+  }
+  .item{
+    width: 100%;
   }
 </style>

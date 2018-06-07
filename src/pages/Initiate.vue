@@ -6,16 +6,18 @@
     <f7-page>
 
 
-      <div v-if="infiniteLoading" >
-      <f7-button v-on:click="initiate()" >Let's go eat!</f7-button>
-      </div>
+      <!--<div v-if="infiniteLoading" >-->
+      <!--<f7-button v-on:click="initiate()" >Let's go eat!</f7-button>-->
+      <!--</div>-->
 
       <div v-if="allowrandom" >
-      <f7-button :disabled=waitForResponse v-on:click="randomize()" >Randomize!</f7-button>
+        <img src="static/chomp.png" class="item"/>
+      <f7-button style="background-color: cornsilk" :disabled=waitForResponse v-on:click="randomize()" >Randomize!</f7-button>
       </div>
 
       <div v-if="infiniteLoading" >
       <f7-progressbar infinite color="multi"></f7-progressbar>
+        <img src="static/waitforbackup.png" class="item"/>
       </div>
 
 
@@ -23,24 +25,40 @@
         <f7-progressbar infinite color="multi"></f7-progressbar>
       </div>
 
-      <div v-if="waitForResponse" class="align-self-center">
-        <h1> {{this.food[this.chosenOne]}}</h1>
+
+
+      <div v-if="waitForResponse || finalized" class="align-self-center" >
+        <f7-block inset style=" color:slategray; background-color: #f1cbff; border-radius: 10px" >
+
+        <p></p>
+        <br/>
+        <p class="gid" >:Result:</p><br/>
+        <f7-block >
+          <h1 class="gid" >{{this.food[this.chosenOne]}}</h1><br/>
+        </f7-block>
+        <p></p>
+          <br/>
+        </f7-block>
+
       </div>
 
       <div v-if="waitForResponse || finalized" class="align-self-center">
-        <h1> Vote yes : {{this.yes}}</h1>
+        <f7-block inset  style=" text-align: center; color:whitesmoke;  border-radius: 10px">
+        <h1 style=" color:slategray; background-color: #e1f7d5"> Yes : {{this.yes}}</h1>
+          <h1 style="color:slategray; background-color: #ffbdbd"> No : {{this.no}}</h1>
+        </f7-block >
       </div>
 
       <div v-if="waitForResponse || finalized" class="align-self-center">
-      <h1> Vote no : {{this.no}}</h1>
+
     </div>
 
       <div v-if="finalized" class="align-self-center">
-        <f7-button v-on:click="confirm" >I'm happy ﾍ(=￣∇￣)ﾉ</f7-button>
+        <f7-button  v-on:click="confirm" >I'm happy ﾍ(=￣∇￣)ﾉ</f7-button>
       </div>
 
       <div v-if="finalized" class="align-self-center">
-        <f7-button v-on:click="reset()" >Again please ヽ(´ー`)ﾉ</f7-button>
+        <f7-button  v-on:click="reset()" >Again please ヽ(´ー`)ﾉ</f7-button>
       </div>
 
     </f7-page>
@@ -58,11 +76,14 @@
     import F7View from "framework7-vue/src/components/view";
     import F7Navbar from "framework7-vue/src/components/navbar";
     import F7Link from "framework7-vue/src/components/link";
+    import F7Block from "framework7-vue/src/components/block";
 
 
     export default {
       name: "Initiate",
-      components: {F7Link, F7Navbar, F7View, F7Progressbar, F7Button, F7Page, F7Preloader},
+      components: {
+        F7Block,
+        F7Link, F7Navbar, F7View, F7Progressbar, F7Button, F7Page, F7Preloader},
       props: ['gid'],
       data() {
           return {
@@ -89,20 +110,7 @@
         // console.log("GID in Rand ",this.gid)
       },
       methods: {
-        initiate() {
-          var temp = this.gid
-          var group = []
-          group.push({name:auth.currentUser.displayName, uid:auth.currentUser.uid})
-          db.ref('groups/'+this.gid+'/going').set(group)
-          db.ref('groups/'+this.gid).update({'start':true})
-          db.ref('groups/'+this.gid+'/members').once('value').then(function (snapshot){
-            for(let people in snapshot.val()){
-              if(auth.currentUser.uid !== snapshot.val()[people].uid){
-                db.ref('users/'+snapshot.val()[people].uid).update({'target': temp})
-              }
-            }
-          })
-        },
+
         randomize() {
           this.chosenOne = Math.floor(Math.random() * (this.food.length))
           db.ref('groups/'+this.gid).update({'chosenfood': this.food[this.chosenOne]})
@@ -141,6 +149,7 @@
           this.allpeople = temppeep
         },
         setLoading() {
+          console.log(this.goingpeople)
           if ((this.goingpeople.length + this.notgopeople) === this.allpeople) {
             this.infiniteLoading = false
           }
@@ -240,6 +249,7 @@
 </script>
 
 <style>
+
   .picture-center {
     position: absolute;
     top: 7%;
@@ -250,6 +260,13 @@
     text-align: center;
     margin-left: auto;
     margin-right: auto;
+  }
+  .item{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 10%;
+    width: 45%;
   }
 </style>
 

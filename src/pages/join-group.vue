@@ -2,21 +2,23 @@
   <f7-view>
   <f7-page>
 
-      <f7-list no-hairlines-md o-hairlines-ios no-hairlines-between>
 
-        <f7-list>
+        <!--<f7-list>-->
 
-          <f7-list-item >
-            <p><img src="/static/backup.png" class="picture-center"/></p>
+          <!--<f7-list-item >-->
+            <div>
+            <img src="/static/backup.png" class="item"/>
 
             <br/>
+            </div>
 
-          </f7-list-item>
+          <!--</f7-list-item>-->
 
-        </f7-list>
+        <!--</f7-list>-->
 
+    <!--<f7-list no-hairlines-md o-hairlines-ios no-hairlines-between>-->
 
-        <f7-list form no-hairlines-md o-hairlines-ios>
+        <f7-list form no-hairlines-md o-hairlines-ios no-hairlines-between>
 
           <f7-list-item>
             <f7-input :value="code" @input="code = $event.target.value"  type="text" placeholder="Group code here...!" clear-button></f7-input>
@@ -25,7 +27,7 @@
           </f7-list-item>
         </f7-list>
 
-      </f7-list>
+      <!--</f7-list>-->
       <p class="segmented">
         <f7-button :disabled=disabled v-on:click="join" class="loader" >Join group!</f7-button>
       </p>
@@ -146,15 +148,21 @@
 </script>
 
 <style>
-  .picture-center {
-    position: absolute;
-    top: 7%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    display: block;
+  /*.picture-center {*/
+    /*position: absolute;*/
+    /*top: 7%;*/
+    /*left: 50%;*/
+    /*transform: translate(-50%, -50%);*/
+    /*display: block;*/
 
-    text-align: center;
+    /*text-align: center;*/
+    /*margin-left: auto;*/
+    /*margin-right: auto;*/
+  /*}*/
+  .item{
+    display: block;
     margin-left: auto;
     margin-right: auto;
+    width: 45%;
   }
 </style>

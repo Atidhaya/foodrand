@@ -14,7 +14,7 @@
             <div class="codeBox"  >
               <p></p>
               <br/>
-            <f7-block >
+            <f7-block style="color: #7a7a7a">
             <p class="gid" >:Access Code:</p><br/>
             <h1 class="gid" >{{this.code}}</h1><br/>
             </f7-block>
@@ -58,7 +58,7 @@
       </f7-popover>
 
     <f7-popup :opened= popupStart >
-      <f7-button @click="closePopup()">Back</f7-button>
+      <!--<f7-button @click="closePopup()">Back</f7-button>-->
       <initiate :gid= this.gid ></initiate>
     </f7-popup>
 
@@ -180,6 +180,7 @@
         db.ref('groups/'+this.gid+'/going').set({name:auth.currentUser.displayName, uid:auth.currentUser.uid})
         db.ref('groups/'+this.gid).update({'start':true})
         this.popupStart =true
+        this.initiate()
       },
       createFood (){
         // console.log("Add food")
@@ -319,6 +320,20 @@
       },
       renderExternal(vl, vlData) {
         this.vlData = vlData;
+      },
+      initiate() {
+        var temp = this.gid
+        var group = []
+        group.push({name:auth.currentUser.displayName, uid:auth.currentUser.uid})
+        db.ref('groups/'+this.gid+'/going').set(group)
+        db.ref('groups/'+this.gid).update({'start':true})
+        db.ref('groups/'+this.gid+'/members').once('value').then(function (snapshot){
+          for(let people in snapshot.val()){
+            if(auth.currentUser.uid !== snapshot.val()[people].uid){
+              db.ref('users/'+snapshot.val()[people].uid).update({'target': temp})
+            }
+          }
+        })
       },
     },
 
