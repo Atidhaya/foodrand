@@ -96,7 +96,7 @@ export default {
           db.ref('groups/'+tempkey).update({'notgo':1})
         }
         else {
-          db.ref('groups/'+tempkey).update({'notgo':snapshot+1})
+          db.ref('groups/'+tempkey+'/notgo').set(snapshot+1)
         }
       })
     }
