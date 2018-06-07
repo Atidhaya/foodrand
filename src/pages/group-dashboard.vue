@@ -2,27 +2,19 @@
   <f7-view>
 
   <f7-page color-theme="orange" dark>
-    <!--<f7-button @click="$emit('closePopup')">Back</f7-button>-->
 
-    <!--<f7-link @click="$f7router.navigate('/about/')">About</f7-link>-->
-
-    <!--<f7-navbar sliding back-link="Back">-->
-
-
-
-    <!--</f7-navbar>-->
-    <f7-button @click="a()">sdsdsd</f7-button>
+    <!--<f7-button @click="a()">sdsdsd</f7-button>-->
 
     <f7-button outline color="green" fill raised big @click="start()">Let's go eat!</f7-button>
 
-      <f7-tabs swipeable animated>
+      <f7-tabs  animated>
 
         <f7-tab id="members" tab-active>
           <f7-block inset>
             <div class="codeBox"  >
               <p></p>
               <br/>
-            <f7-block >
+            <f7-block style="color: #7a7a7a">
             <p class="gid" >:Access Code:</p><br/>
             <h1 class="gid" >{{this.code}}</h1><br/>
             </f7-block>
@@ -66,7 +58,7 @@
       </f7-popover>
 
     <f7-popup :opened= popupStart >
-      <f7-button @click="closePopup()">Back</f7-button>
+      <!--<f7-button @click="closePopup()">Back</f7-button>-->
       <initiate :gid= this.gid ></initiate>
     </f7-popup>
 
@@ -100,7 +92,7 @@
   import F7Popover from "framework7-vue/src/components/popover";
   import F7View from "framework7-vue/src/components/view";
   import F7Tabs from "framework7-vue/src/components/tabs";
-  import {db} from '../firebase.js';
+  import {auth,db} from '../firebase.js';
   import F7Popup from "framework7-vue/src/components/popup";
   import Initiate from "./Initiate";
 
@@ -182,35 +174,32 @@
         // this.$f7.router.navigate('/about/')
         // view.router.navigate('/about/')
       },
+
       start (){
-        console.log("Starting Rand")
+        // console.log("Starting Rand")
+        db.ref('groups/'+this.gid+'/going').set({name:auth.currentUser.displayName, uid:auth.currentUser.uid})
+        db.ref('groups/'+this.gid).update({'start':true})
         this.popupStart =true
+        this.initiate()
       },
       createFood (){
-        console.log("Add food")
+        // console.log("Add food")
         this.$f7.dialog.prompt('Enter your preferred food','Add Food',this.addFood )
       },
       deleteFood(){
         const key =this.targetId
-        console.log("Remove... ", key)
+        // console.log("Remove... ", key)
         this.$firebaseRefs.groups.child(this.gid).child('places').child(key).remove()
         this.updatePlacesAndMembers()
         this.closePopoverFood()
       },
       addFood (food){
-        console.log("Add...", food)
+        // console.log("Add...", food)
         const key = this.$firebaseRefs.groups.child(this.gid).child('places').push({name: food}).getKey()
         this.$firebaseRefs.groups.child(this.gid).child('places').child(key).update({key: key})
         this.updatePlacesAndMembers()
       },
-      // deleteMember (){
-      //   console.log("Delete Member ... ",this.targetName, this.targetId, ' in ' , this.gid)
-      //   this.$firebaseRefs.groups.child(this.gid).child('members').child(this.targetId).remove()
-      //   //Access that member group list and set flag group
-      //   this.$firebaseRefs.all.child('users').child(this.targetId).child('groups').child(this.gid).child('active').set(false)
-      //   this.updatePlacesAndMembers()
-      //   this.closePopoverUser()
-      // },
+
       findIndexUsingKey (list, key){
         for(let i = 0; i<list.length; i++){
           // console.log(list[i],key)
@@ -221,7 +210,7 @@
         return -1
       } ,
       findIndexUsingUid (list, targetUid){
-        console.log('TargetList: ',list)
+        // console.log('TargetList: ',list)
         for(let i = 0; i<list.length; i++){
           console.log(list[i],targetUid)
           if(list[i].uid === targetUid){
@@ -230,21 +219,43 @@
         }
         return -1
       },
+      findLength(list){
+        let count = 0
+        // console.log("Find l")
+        for(let a in list){
+          count = count + 1
+          // console.log('item: ',list[a])
+          // if(list.hasOwnProperty(key)) {
+          //   console.log('item: ',list[key])
+          // }
+        }
+        return count
+      },
       deleteMember( ){
         const uid = this.targetId
         const groupIndex = this.findIndexUsingKey(this.groups, this.gid)
         const userIndex = this.findIndexUsingUid(this.groups[groupIndex].members,uid)
-
-        if(this.groups[groupIndex].members.length === 1){
+        // console.log('Groups',this.groups)
+        // console.log("Groups User",this.groups[groupIndex].members[uid])
+        // console.log("Users Group", this.users)
+        // console.log("Delete Member ... ", uid ,' in ' , this.gid)
+        // console.log("Length", this.groups[groupIndex].members.length)
+        // console.log("Members", this.groups[groupIndex].members)
+        const len = this.findLength(this.groups[groupIndex].members)
+        // console.log("Get Length",len)
+        if(len === 1){
           console.log("Last user !! Delete the group")
           this.$firebaseRefs.groups.child(this.gid).remove()
+          this.$firebaseRefs.users.child(uid+'/groups/'+this.gid).remove()
+          location.reload()
         }else{
-          this.$firebaseRefs.groups.child(this.gid +'/members/' + userIndex).remove()
+          console.log("Not Last User")
+          this.$firebaseRefs.groups.child(this.gid +'/members/' + uid).remove()
         }
-        console.log("Delete Member ... ", uid ,' in ' , this.gid)
+        // console.log("Delete Member ... ", uid ,' in ' , this.gid)
         //Access that member group list and set flag group
-        this.$firebaseRefs.users.child(userIndex).child('groups').child(this.gid).remove()
-        console.log('Leave',this.gid)
+        this.$firebaseRefs.users.child(uid+'/groups/'+this.gid).remove()
+        // console.log('Leave',this.gid)
         this.updatePlacesAndMembers()
         this.closePopoverUser()
       },
@@ -252,7 +263,7 @@
         for (var i =0; i < this.groups.length; i++){
           // console.log(this.groups[i]['.key'])
           if(this.groups[i]['.key'] === this.gid){
-            console.log('found group ',this.groups[i]['.key'])
+            // console.log('found group ',this.groups[i]['.key'])
             this.code = this.groups[i].code
             //Found the group
             this.members = this.groups[i].members
@@ -263,33 +274,33 @@
         return false
 
       },
-      // toast() {
-      //   app.toast.create({
-      //     icon: app.theme === 'ios' ? '<i class="f7-icons">star</i>' : '<i class="material-icons">star</i>',
-      //     text: 'I\'m with icon',
-      //     position: 'center',
-      //     closeTimeout: 2000,
-      //   });
+      // openPopover (name,id,type) {
+      //
+      //   this.targetName = name
+      //   this.targetId = id
+      //   if(type === 'food'){
+      //     this.popoverOpenFood =true
+      //
+      //   }else if (type === 'user'){
+      //     this.popoverOpenUser = true
+      //   }
+      //
+      //   // console.log("Target ",this.targetName)
       // },
-      openAddPlaces (){
-        this.addPlacePopover = true
-      },
 
-      closeAddPlaces (){
-        this.addPlacePopover = false
-      },
       openPopover (name,id,type) {
 
         this.targetName = name
         this.targetId = id
         if(type === 'food'){
-          this.popoverOpenFood =true
+          this.$f7.dialog.confirm("Delete "+ this.targetName +" from the list?","Foodrand",this.deleteFood,this.closePopoverFood)
 
         }else if (type === 'user'){
-          this.popoverOpenUser = true
+          this.$f7.dialog.confirm("Kick "+ this.targetName +" from the list?","Foodrand",this.deleteMember,this.closePopoverFood)
+
         }
 
-        console.log("Target ",this.targetName)
+        // console.log("Target ",this.targetName)
       },
       closePopup() {
         this.popupStart = false
@@ -310,13 +321,22 @@
       renderExternal(vl, vlData) {
         this.vlData = vlData;
       },
+      initiate() {
+        var temp = this.gid
+        var group = []
+        group.push({name:auth.currentUser.displayName, uid:auth.currentUser.uid})
+        db.ref('groups/'+this.gid+'/going').set(group)
+        db.ref('groups/'+this.gid).update({'start':true})
+        db.ref('groups/'+this.gid+'/members').once('value').then(function (snapshot){
+          for(let people in snapshot.val()){
+            if(auth.currentUser.uid !== snapshot.val()[people].uid){
+              db.ref('users/'+snapshot.val()[people].uid).update({'target': temp})
+            }
+          }
+        })
+      },
     },
-    // computed: {
-    //   placesList () {
-    //     const a = this.gid
-    //     return this.updatePlacesAndMembers()
-    //   }
-    // },
+
     watch: {
       gid: function () {
         console.log('watch')

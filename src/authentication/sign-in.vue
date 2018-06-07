@@ -1,7 +1,8 @@
 <template>
   <div id="sign-in">
   <f7-page login-screen>
-    <f7-login-screen-title> Foodrand </f7-login-screen-title>
+    <!--<f7-login-screen-title> Foodrand </f7-login-screen-title>-->
+    <img src="static/foodrand.png" class="item"/>
     <f7-list form>
       <f7-list-item>
         <f7-label>Email</f7-label>
@@ -64,3 +65,12 @@
     }
   }
 </script>
+
+<style>
+  .item{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 65%;
+  }
+</style>

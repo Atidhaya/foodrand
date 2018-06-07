@@ -2,20 +2,25 @@
   <f7-view>
    <f7-page>
 
-     <f7-list no-hairlines-md o-hairlines-ios no-hairlines-between>
 
-      <f7-list>
 
-          <f7-list-item >
-            <p> <img src="/static/goahead.png" class="picture-center"/> </p>
+      <!--<f7-list>-->
 
-            <br/>
+          <!--<f7-list-item >-->
+     <div >
 
-          </f7-list-item>
+         <img src="/static/goahead.png" class="item"/>
 
-        </f7-list>
+     </div>
 
-       <f7-list no-hairlines-md o-hairlines-ios>
+     <br/>
+
+
+          <!--</f7-list-item>-->
+
+        <!--</f7-list>-->
+     <!--<f7-list no-hairlines-md o-hairlines-ios no-hairlines-between>-->
+       <f7-list form no-hairlines-md o-hairlines-ios no-hairlines-between>
 
         <f7-list-item>
         <f7-input :value="tempname" @input="tempname = $event.target.value"  type="text" placeholder="Group name" clear-button></f7-input>
@@ -24,7 +29,7 @@
 
       </f7-list>
 
-    </f7-list>
+    <!--</f7-list>-->
 
     <p class="segmented">
       <f7-button :disabled=disabled v-on:click="createGroup" class="loader" >Create</f7-button>
@@ -50,11 +55,15 @@
   import F7View from "framework7-vue/src/components/view";
   import {db, auth} from '../firebase'
   import shortid from "shortid"
+  import F7Input from "framework7-vue/src/components/input";
+  import F7Button from "framework7-vue/src/components/button";
 
 
 
   export default {
     components: {
+      F7Button,
+      F7Input,
       F7View,
       F7Icon,
       F7Link,
@@ -84,7 +93,8 @@
           places: [],
           start: false,
           name: '',
-          code: ''
+          code: '',
+          members: {}
         },
         me: {
           name: '',
@@ -141,15 +151,10 @@
 </script>
 
 <style>
-  .picture-center {
-    position: absolute;
-    top: 7%;
-    left: 40%;
-    transform: translate(-50%, -50%);
+  .item{
     display: block;
-
-    text-align: center;
     margin-left: auto;
     margin-right: auto;
+    width: 45%;
   }
 </style>
