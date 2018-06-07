@@ -11,7 +11,9 @@
       <f7-button v-on:click="randomize()" >Randomize!</f7-button>
 
 
-      <p id="demo-determinate-container"></p>
+      <div v-if="infiniteLoading" >
+      <f7-progressbar infinite color="multi"></f7-progressbar>
+      </div>
 
     </f7-page>
 
@@ -27,7 +29,7 @@
     import F7Page from "framework7-vue/src/components/page";
     import F7Button from "framework7-vue/src/components/button";
     import F7Progressbar from "framework7-vue/src/components/progressbar";
-    import {db} from '../firebase'
+    import {db, auth} from '../firebase'
     import F7View from "framework7-vue/src/components/view";
     import F7Navbar from "framework7-vue/src/components/navbar";
     import F7Link from "framework7-vue/src/components/link";
@@ -42,42 +44,79 @@
             determinateLoading: false,
             progressBarEl: '',
             progress: 0,
-            groupid: ''
+            food: [],
+            groups: [],
+            chosenOne: '',
+            people: [],
+            infiniteLoading: true
           }
       },
       beforeCreate () {
-        console.log("GID in Rand ",this.gid)
+        // console.log("GID in Rand ",this.gid)
       },
       methods: {
         initiate() {
-          db.ref('groups'+this.gid+'/going').set({name:auth.currentUser.displayName, uid:auth.currentUser.uid})
-          db.ref('groups'+this.gid).update({'start':true})
+          var temp = this.gid
+          var group = []
+          group.push({name:auth.currentUser.displayName, uid:auth.currentUser.uid})
+          db.ref('groups/'+this.gid+'/going').set(group)
+          console.log(db.ref('groups/'+this.gid+'/going'))
+          db.ref('groups/'+this.gid).update({'start':true})
+          db.ref('groups/'+this.gid+'/members').once('value').then(function (snapshot){
+            console.log(snapshot.val())
+            for(let people in snapshot.val()){
+              // console.log(snapshot.val()[0])
+              console.log(snapshot.val()[people].uid)
+              if(auth.currentUser.uid !== snapshot.val()[people].uid){
+                db.ref('users/'+snapshot.val()[people].uid).update({'target': temp})
+              }
+            }
+          })
         },
         randomize() {
-          this.setgid()
-          console.log(this.gid)
-          console.log(this.food)
-          console.log(this.food.length)
-          console.log(this.database)
-          // console.log("GID in Rand ",this.gid)
+          this.chosenOne = Math.floor(Math.random() * (this.food.length+ 1))
+          console.log(this.chosenOne)
         },
-        setgid() {
-          this.groupid = this.gid
-          console.log(this.groupid)
-          console.log(this.gid)
-        }
+        setFood() {
+          let temp = []
+          for(let i = 0; i < this.groups.length; i++) {
+            if(this.groups[i]['.key'] === this.gid) {
+              for(let p in this.groups[i].places){
+                console.log('our food:',this.groups[i].places[p])
+                console.log(this.groups[i].places[p].name)
+                temp.push(this.groups[i].places[p].name)
+              }
+            }
+          }
+          this.food = temp
+        },
+        setPeople() {
+          for(let i = 0; i < this.groups.length; i++) {
+            // console.log('loop through group....',this.groups[i]['.key'])
+            // console.log('Correct ? ..', this.groups[i]['.key'] === this.gid)
+            if(this.groups[i]['.key'] === this.gid) {
+              this.people = this.groups[i].going
+            }
+          }
+        },
+
     },
+      watch: {
+        gid: function (){
+          console.log('watch gid from Initiate')
+          this.setFood()
+        },
+        groups: function (){
+          console.log('watch groups')
+          this.setFood()
+          this.setPeople()
+
+        }
+      },
       firebase: function () {
-        this.setgid()
         return {
-          going: {
-            source: db.ref('groups/' + this.groupid + '/going')
-          },
-          food: {
-            source: db.ref('groups/' + this.groupid + '/places')
-          },
-          database: {
-            source: db.ref('groups/' + this.groupid)
+          groups : {
+            source: db.ref('groups/')
           }
         }
       }

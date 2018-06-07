@@ -138,7 +138,7 @@
                 this.$store.dispatch('setUser', {email: this.email})
                 console.log('name:' , this.name)
                 console.log(auth.currentUser.displayName)
-                db.ref('users/' + auth.currentUser.uid).set({ email: this.email, name: this.name })
+                db.ref('users/' + auth.currentUser.uid).set({ email: this.email, name: this.name, target: 'none' })
                 this.$store.dispatch('setLoading', false)
                 location.reload()
               })

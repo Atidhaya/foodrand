@@ -95,13 +95,80 @@ import F7Tabs from "framework7-vue/src/components/tabs";
 import F7Tab from "framework7-vue/src/components/tab";
 import F7Popup from "framework7-vue/src/components/popup";
 import SignIn from "./authentication/sign-in";
+import {auth, db} from "./firebase"
 
-export default {components: {
+
+export default {
+  components: {
     SignIn,
     F7Popup,
     F7Tab,
     F7Tabs,
     CreateGroup,
     F7View,
-    F7Button}}
+    F7Button},
+  data () {
+    return{
+      target:'',
+      groupname:'',
+      key:''
+    }
+  },
+  firebase: function() {
+    return {
+      target: {
+        source: db.ref('users/' + auth.currentUser.uid)
+      },
+      groups: {
+        source: db.ref('groups/')
+      }
+    }
+  },
+  methods: {
+    go() {
+      console.log('passed key:',this.key)
+      let tempkey = this.key
+      var dbRef = db.ref('groups/'+tempkey+'/going');
+      dbRef.transaction(function(snapshot) {
+        snapshot.push({name: auth.currentUser.displayName, uid:auth.currentUser.uid})
+        db.ref('groups/'+tempkey+'/going').set(snapshot)
+        db.ref('users/'+auth.currentUser.uid).update({'target':'none'})
+      })
+    },
+    reject () {
+      console.log('REJECTED')
+      let tempkey = this.key
+      db.ref('users/'+auth.currentUser.uid).update({'target':'none'})
+      var dbRef = db.ref('groups/'+tempkey+'/notgo');
+      dbRef.transaction(function(snapshot) {
+        console.log(snapshot)
+        if(snapshot === null){
+          db.ref('groups/'+tempkey).set({'notgo':1})
+        }
+        else {
+          db.ref('groups/'+tempkey).update({'notgo':snapshot+1})
+        }
+      })
+    }
+  },
+  watch: {
+    target: function () {
+      // console.log('Someone prompt the let\'s eat!')
+      // console.log(this.target)
+      // console.log(this.target[2]['.value'])
+      // console.log(this.target['target'])
+      for(let i =0; i<this.target.length;i++){
+        if(this.target[i]['.key'] === 'target'){
+          if(this.target[i]['.value'] !== 'none') {
+            this.key = this.target[i]['.value']
+            // db.ref('users/'+auth.currentUser.uid).update({'target': 'none'})
+            this.$f7.dialog.confirm('Group name have invite you to eat!','Foodrand', this.go, this.reject)
+
+          }
+        }
+      }
+    }
+  }
+
+}
 </script>
