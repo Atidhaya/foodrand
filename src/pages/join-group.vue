@@ -7,7 +7,7 @@
 
           <!--<f7-list-item >-->
             <div>
-            <img src="/static/backup.png" class="item"/>
+            <img src="static/backup.png" class="item"/>
 
             <br/>
             </div>
