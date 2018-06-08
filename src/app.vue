@@ -103,13 +103,19 @@ export default {
   },
   watch: {
     target: function () {
-
+      let tempname = ''
       for(let i =0; i<this.target.length;i++){
         if(this.target[i]['.key'] === 'target'){
           if(this.target[i]['.value'] !== 'none') {
-            this.targetGid = this.target[i]['.value']
-            this.$f7.dialog.confirm('Group name have invite you to eat!','Foodrand', this.go, this.reject)
-
+            // console.log(db.ref('groups/'+this.target[i]['.value']))
+            // console.log(db.ref('groups/'+this.target[i]['.value']['name']))
+            db.ref('groups/'+this.target[i]['.value']).once('value').then(function(snapshot){
+              tempname = snapshot.val().name
+            }).then(()=>{
+              this.groupname = tempname
+              this.targetGid = this.target[i]['.value']
+              this.$f7.dialog.confirm(this.groupname+' have invite you to eat!','Foodrand', this.go, this.reject)
+            })
           }
         }
       }

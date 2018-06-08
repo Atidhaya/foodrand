@@ -12,12 +12,16 @@
 
       <div v-if="allowrandom" >
         <img src="static/chomp.png" class="item"/>
-      <f7-button style="background-color: cornsilk" :disabled=waitForResponse v-on:click="randomize()" >Randomize!</f7-button>
+        <br/>
+        <p style="font-size: 18px; text-align: center" >Everyone Is Ready! Let's Start!</p>
+        <br/>
+      <f7-button style="background-color: cornsilk" big  v-on:click="randomize()" >Start Randomize!</f7-button>
       </div>
 
       <div v-if="infiniteLoading" >
       <f7-progressbar infinite color="multi"></f7-progressbar>
         <img src="static/waitforbackup.png" class="item"/>
+        <p style="font-size: 18px; text-align: center">Calling Party Members, Please Wait..</p>
       </div>
 
 
@@ -54,11 +58,12 @@
     </div>
 
       <div v-if="finalized" class="align-self-center">
-        <f7-button  v-on:click="confirm" >I'm happy ﾍ(=￣∇￣)ﾉ</f7-button>
+        <f7-button big v-on:click="confirm" >I'm happy ﾍ(=￣∇￣)ﾉ</f7-button>
+        <br/>
+        <f7-button big v-on:click="reset()" >Again please ヽ(´ー`)ﾉ</f7-button>
       </div>
-
-      <div v-if="finalized" class="align-self-center">
-        <f7-button  v-on:click="reset()" >Again please ヽ(´ー`)ﾉ</f7-button>
+      <div v-else-if="!finalized && waitForResponse" class="align-self-center">
+        <p style="font-size: 18px; text-align: center" >Waiting For Everyone To Decide...</p>
       </div>
 
     </f7-page>

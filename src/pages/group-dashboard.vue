@@ -16,7 +16,7 @@
               <br/>
             <f7-block style="color: #7a7a7a">
             <p class="gid" >:Access Code:</p><br/>
-            <h1 class="gid" >{{this.code}}</h1><br/>
+            <h1 class="gid" style="font-family: verdana;" >{{this.code}}</h1><br/>
             </f7-block>
               <p></p>
               <br/>
@@ -135,6 +135,7 @@
         groups: [],
         places: {},
         vlData: {},
+        noFood: true,
         code:'',
       }
     },
@@ -176,11 +177,15 @@
       },
 
       start (){
-        // console.log("Starting Rand")
-        db.ref('groups/'+this.gid+'/going').set({name:auth.currentUser.displayName, uid:auth.currentUser.uid})
-        db.ref('groups/'+this.gid).update({'start':true})
-        this.popupStart =true
-        this.initiate()
+        if(this.noFood){
+          this.$f7.dialog.alert("You don't have any food places yet! Please add some. Σ(ﾟдﾟ；)")
+        }else{
+          // console.log("Starting Rand")
+          db.ref('groups/'+this.gid+'/going').set({name:auth.currentUser.displayName, uid:auth.currentUser.uid})
+          db.ref('groups/'+this.gid).update({'start':true})
+          this.popupStart =true
+          this.initiate()
+        }
       },
       createFood (){
         // console.log("Add food")
@@ -268,6 +273,11 @@
             //Found the group
             this.members = this.groups[i].members
             this.places = this.groups[i].places
+            if(this.places === undefined){
+              this.noFood = true
+            }else{
+              this.noFood = false
+            }
             return true
           }
         }
