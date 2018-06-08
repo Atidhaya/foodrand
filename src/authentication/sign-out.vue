@@ -9,7 +9,7 @@
         <!--<f7-list-item >-->
           <div >
             <p>
-            <img src="/static/ohno.png" class="item"/>
+            <img src="static/ohno.png" class="item"/>
             </p>
           </div>
 

@@ -100,8 +100,8 @@
             allowrandom: false,
             waitForResponse: false,
             finalized: false,
-            yes: 0,
-            no: 0,
+            yes: -1,
+            no: -1,
             total: 0,
             satisfied: false
           }
@@ -117,6 +117,8 @@
           this.waitForResponse = true
           this.finalized = false
           this.allowrandom = false
+          this.yes = 0
+          this.no = 0
 
         },
         setFood() {
@@ -155,8 +157,8 @@
           }
         },
         setVote() {
-          let tempyes = 0
-          let tempno = 0
+          let tempyes = this.yes
+          let tempno = this.no
           db.ref('groups/'+this.gid+'/vote').once('value').then(function(snapshot){
             if(snapshot.val() === null){
             }
@@ -191,6 +193,14 @@
         },
         reload() {
           location.reload()
+        },
+        castVote() {
+          this.total = this.yes+this.no
+          if(this.total >= (this.goingpeople.length)-1) {
+            // this.allowrandom = true
+            this.waitForResponse = false
+            this.finalized = true
+          }
         }
     },
       watch: {
@@ -199,12 +209,15 @@
           this.setFood()
           this.setPeople()
           this.setVote()
+          this.castVote()
         },
         groups: function (){
           console.log('watch groups')
           this.setFood()
           this.setPeople()
           this.setVote()
+          this.castVote()
+
         },
         goingpeople: function () {
           this.setLoading()
@@ -223,7 +236,7 @@
         yes: function () {
           this.setVote()
           this.total = this.yes + this.no
-          if (this.total === (this.goingpeople.length) - 1) {
+          if (this.total >= (this.goingpeople.length) - 1) {
             this.waitForResponse = false
             this.finalized = true
           }
